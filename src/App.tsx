@@ -35,8 +35,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page */}
-        <Route path="/landing" element={<LandingPage />} />
+        {/* Landing page - now the main page */}
+        <Route path="/" element={<LandingPage />} />
         
         {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
@@ -46,7 +46,7 @@ function App() {
         <Route path="/test-supabase" element={<SupabaseTestPage />} />
         
         {/* Protected routes */}
-        <Route path="/" element={
+        <Route path="/dashboard" element={
           <ProtectedRoute>
             <Layout>
               <Dashboard />
@@ -89,7 +89,7 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to dashboard */}
+        {/* Redirect any unknown routes to landing page */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
