@@ -4,7 +4,7 @@ import { Layout } from './components/layout/Layout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { SignIn } from './components/auth/SignIn';
 import { SignUp } from './components/auth/SignUp';
-import LandingPageSingle from './pages/LandingPage';
+import { LandingPage } from './pages/LandingPage';
 import { Dashboard } from './pages/Dashboard';
 import { TestSetup } from './pages/TestSetup';
 import { VisualFieldTest } from './pages/VisualFieldTest';
@@ -36,7 +36,7 @@ function App() {
     <Router>
       <Routes>
         {/* Landing page - now the main page */}
-        <Route path="/" element={<LandingPageSingle />} />
+        <Route path="/" element={<LandingPage />} />
         
         {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
