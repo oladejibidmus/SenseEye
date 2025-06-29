@@ -24,7 +24,7 @@ interface SidebarProps {
 }
 
 const navigationItems = [
-  { icon: Home, label: 'Dashboard', path: '/dashboard', description: 'Overview and statistics' },
+  { icon: Home, label: 'Dashboard', path: '/', description: 'Overview and statistics' },
   { icon: SettingsIcon, label: 'Test Setup', path: '/setup', description: 'Configure test parameters' },
   { icon: Eye, label: 'Visual Field Test', path: '/test', description: 'Conduct visual field testing' },
   { icon: BarChart3, label: 'Results', path: '/results', description: 'View and analyze test results' },
