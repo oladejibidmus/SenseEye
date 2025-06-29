@@ -16,7 +16,7 @@ import { useDatabase } from './hooks/useDatabase';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { loading: authLoading } = useAuth();
+  const { loading: authLoading, user } = useAuth();
   
   // Initialize database connection and load data only when authenticated
   useDatabase();
@@ -35,8 +35,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page */}
-        <Route path="/landing" element={<LandingPage />} />
+        {/* Landing page - default route */}
+        <Route path="/" element={<LandingPage />} />
         
         {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
@@ -45,8 +45,8 @@ function App() {
         {/* Test route - accessible without authentication for debugging */}
         <Route path="/test-supabase" element={<SupabaseTestPage />} />
         
-        {/* Protected routes */}
-        <Route path="/" element={
+        {/* Protected routes - redirect to dashboard after authentication */}
+        <Route path="/dashboard" element={
           <ProtectedRoute>
             <Layout>
               <Dashboard />
@@ -89,7 +89,7 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to dashboard */}
+        {/* Redirect any unknown routes to landing page */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

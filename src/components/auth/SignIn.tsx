@@ -10,6 +10,7 @@ import {
   Lock,
   AlertCircle,
   Loader2,
+  ArrowLeft,
 } from 'lucide-react';
 
 const container = {
@@ -52,7 +53,7 @@ export const SignIn: React.FC = () => {
       }
 
       if (data.user) {
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (err: any) {
       console.error('Sign in error:', err);
@@ -78,6 +79,10 @@ export const SignIn: React.FC = () => {
     }));
   };
 
+  const handleBackToHome = () => {
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen bg-background-primary flex items-center justify-center p-4">
       <motion.div
@@ -86,11 +91,22 @@ export const SignIn: React.FC = () => {
         animate="show"
         className="w-full max-w-md"
       >
+        {/* Back to Home Button */}
+        <motion.div variants={item} className="mb-6">
+          <button
+            onClick={handleBackToHome}
+            className="flex items-center space-x-2 text-text-secondary hover:text-text-primary transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Home</span>
+          </button>
+        </motion.div>
+
         <motion.div variants={item} className="text-center mb-8">
           <div className="w-16 h-16 bg-accent-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <Eye className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-text-primary mb-2">VisionTest</h1>
+          <h1 className="text-3xl font-bold text-text-primary mb-2">SenseEye</h1>
           <p className="text-text-secondary">Clinical Platform</p>
           <p className="text-text-tertiary text-sm mt-2">Sign in to your ophthalmic tech account</p>
         </motion.div>

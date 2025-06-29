@@ -12,6 +12,7 @@ import {
   AlertCircle,
   CheckCircle,
   Loader2,
+  ArrowLeft,
 } from 'lucide-react';
 
 const container = {
@@ -119,6 +120,10 @@ export const SignUp: React.FC = () => {
     }));
   };
 
+  const handleBackToHome = () => {
+    navigate('/');
+  };
+
   if (success) {
     return (
       <div className="min-h-screen bg-background-primary flex items-center justify-center p-4">
@@ -134,7 +139,7 @@ export const SignUp: React.FC = () => {
               </div>
               <h2 className="text-xl font-semibold text-text-primary mb-2">Account Created Successfully!</h2>
               <p className="text-text-secondary text-sm mb-4">
-                Welcome to the VisionTest platform. You can now sign in with your credentials.
+                Welcome to the SenseEye platform. You can now sign in with your credentials.
               </p>
               <p className="text-text-tertiary text-xs">
                 Redirecting to sign in page...
@@ -154,11 +159,22 @@ export const SignUp: React.FC = () => {
         animate="show"
         className="w-full max-w-md"
       >
+        {/* Back to Home Button */}
+        <motion.div variants={item} className="mb-6">
+          <button
+            onClick={handleBackToHome}
+            className="flex items-center space-x-2 text-text-secondary hover:text-text-primary transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Home</span>
+          </button>
+        </motion.div>
+
         <motion.div variants={item} className="text-center mb-8">
           <div className="w-16 h-16 bg-accent-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <Eye className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-text-primary mb-2">VisionTest</h1>
+          <h1 className="text-3xl font-bold text-text-primary mb-2">SenseEye</h1>
           <p className="text-text-secondary">Clinical Platform</p>
           <p className="text-text-tertiary text-sm mt-2">Create your ophthalmic tech account</p>
         </motion.div>
