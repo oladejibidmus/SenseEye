@@ -82,6 +82,9 @@ const navigationLinks = [{
   href: "#contact"
 }] as any[];
 
+// Light mode utility function
+const cn = (...classes: string[]) => classes.filter(Boolean).join(' ');
+
 export default function LandingPageSingle({}: LandingPageSingleProps) {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -113,23 +116,23 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
     navigate('/test-supabase');
   };
 
-  return <div className="min-h-screen bg-background-primary">
+  return <div className="min-h-screen bg-white">
       {/* Fixed Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background-secondary/95 backdrop-blur-sm border-b border-border-subtle">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
-                <Eye className="w-5 h-5 text-white" aria-hidden="true" />
+              <div className="p-2 bg-blue-600/10 rounded-lg">
+                <Eye className="h-6 w-6 text-blue-600" aria-hidden="true" />
               </div>
-              <h1 className="text-xl font-bold text-text-primary">VisionTest</h1>
-              <span className="text-xs text-text-tertiary bg-background-tertiary px-2 py-1 rounded">Clinical Platform</span>
+              <h1 className="text-xl font-bold text-gray-900">VisionTest</h1>
+              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Clinical Platform</span>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              {navigationLinks.map(link => <button key={link.label} onClick={() => scrollToSection(link.href)} className="text-text-secondary hover:text-text-primary transition-colors duration-200 font-medium">
+              {navigationLinks.map(link => <button key={link.label} onClick={() => scrollToSection(link.href)} className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium">
                   {link.label}
                 </button>)}
               <Button onClick={handleGetStarted}>
@@ -139,8 +142,8 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
             </div>
 
             {/* Mobile Menu Button */}
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-background-tertiary transition-colors" aria-label="Toggle mobile menu">
-              {mobileMenuOpen ? <X className="h-6 w-6 text-text-primary" /> : <Menu className="h-6 w-6 text-text-primary" />}
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Toggle mobile menu">
+              {mobileMenuOpen ? <X className="h-6 w-6 text-gray-900" /> : <Menu className="h-6 w-6 text-gray-900" />}
             </button>
           </div>
 
@@ -154,9 +157,9 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
         }} exit={{
           opacity: 0,
           height: 0
-        }} className="md:hidden border-t border-border-subtle bg-background-secondary">
+        }} className="md:hidden border-t border-gray-200 bg-white">
               <div className="px-4 py-6 space-y-4">
-                {navigationLinks.map(link => <button key={link.label} onClick={() => scrollToSection(link.href)} className="block w-full text-left text-text-secondary hover:text-text-primary transition-colors duration-200 font-medium py-2">
+                {navigationLinks.map(link => <button key={link.label} onClick={() => scrollToSection(link.href)} className="block w-full text-left text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium py-2">
                     {link.label}
                   </button>)}
                 <Button onClick={handleGetStarted} className="w-full mt-4">
@@ -181,11 +184,11 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
           duration: 0.6
         }} className="text-center space-y-8">
             <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                 Professional Visual Field Testing{" "}
-                <span className="text-accent-primary">Platform</span>
+                <span className="text-blue-600">Platform</span>
               </h1>
-              <p className="text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Comprehensive clinical platform for ophthalmic technicians featuring advanced 
                 visual field testing, patient management, and detailed analytics to enhance 
                 diagnostic accuracy and streamline your practice workflow.
@@ -213,26 +216,26 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
             duration: 0.8,
             delay: 0.2
           }} className="mt-16 relative">
-              <div className="bg-background-secondary rounded-3xl p-12 max-w-4xl mx-auto border border-border-subtle">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-3xl p-12 max-w-4xl mx-auto border border-gray-200">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                   <div className="flex justify-center">
-                    <div className="p-6 bg-accent-primary/10 rounded-2xl">
-                      <Eye className="h-16 w-16 text-accent-primary" />
+                    <div className="p-6 bg-blue-600/10 rounded-2xl">
+                      <Eye className="h-16 w-16 text-blue-600" />
                     </div>
                   </div>
                   <div className="flex justify-center">
-                    <div className="p-6 bg-accent-primary/10 rounded-2xl">
-                      <Brain className="h-16 w-16 text-accent-primary" />
+                    <div className="p-6 bg-blue-600/10 rounded-2xl">
+                      <Brain className="h-16 w-16 text-blue-600" />
                     </div>
                   </div>
                   <div className="flex justify-center">
-                    <div className="p-6 bg-accent-primary/10 rounded-2xl">
-                      <BarChart3 className="h-16 w-16 text-accent-primary" />
+                    <div className="p-6 bg-blue-600/10 rounded-2xl">
+                      <BarChart3 className="h-16 w-16 text-blue-600" />
                     </div>
                   </div>
                 </div>
                 <div className="text-center mt-8">
-                  <p className="text-text-secondary text-lg">
+                  <p className="text-gray-600 text-lg">
                     Precision • Intelligence • Clinical Excellence
                   </p>
                 </div>
@@ -243,7 +246,7 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-background-secondary">
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{
           opacity: 0,
@@ -256,10 +259,10 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
         }} viewport={{
           once: true
         }} className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
               Complete Clinical Testing Suite
             </h2>
-            <p className="text-xl text-text-secondary max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Everything ophthalmic technicians need for professional visual field testing
             </p>
           </motion.div>
@@ -279,20 +282,20 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
             }} viewport={{
               once: true
             }}>
-                  <Card className="h-full hover:shadow-medium transition-all duration-300 hover:-translate-y-1">
+                  <Card className="h-full group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white border border-gray-200">
                     <div className="p-8 text-center space-y-6">
-                      <div className="mx-auto w-16 h-16 bg-accent-primary/10 rounded-2xl flex items-center justify-center">
-                        <Icon className="h-8 w-8 text-accent-primary" />
+                      <div className="mx-auto w-16 h-16 bg-blue-600/10 rounded-2xl flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">
+                        <Icon className="h-8 w-8 text-blue-600" />
                       </div>
                       <div className="space-y-3">
-                        <h3 className="text-xl font-semibold text-text-primary">
+                        <h3 className="text-xl font-semibold text-gray-900">
                           {feature.title}
                         </h3>
-                        <p className="text-text-secondary leading-relaxed">
+                        <p className="text-gray-600 leading-relaxed">
                           {feature.description}
                         </p>
                       </div>
-                      <div className="flex items-center justify-center space-x-2 text-accent-primary font-medium">
+                      <div className="flex items-center justify-center space-x-2 text-blue-600 font-medium">
                         <CheckCircle className="h-4 w-4" />
                         <span className="text-sm">Available Now</span>
                       </div>
@@ -318,16 +321,16 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
         }} viewport={{
           once: true
         }} className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
               Trusted by Eye Care Professionals
             </h2>
-            <p className="text-xl text-text-secondary max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               See what ophthalmologists and ophthalmic technicians are saying about VisionTest
             </p>
           </motion.div>
 
           <div className="relative max-w-4xl mx-auto">
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden bg-white border border-gray-200">
               <div className="p-0">
                 <div className="h-80">
                   <motion.div key={currentTestimonial} initial={{
@@ -343,20 +346,20 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
                   duration: 0.5
                 }} className="p-12 text-center space-y-6">
                     <div className="flex justify-center space-x-1 mb-6">
-                      {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => <Star key={i} className="h-5 w-5 fill-warning text-warning" />)}
+                      {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />)}
                     </div>
                     
-                    <blockquote className="text-xl text-text-secondary leading-relaxed italic">
+                    <blockquote className="text-xl text-gray-600 leading-relaxed italic">
                       "{testimonials[currentTestimonial].quote}"
                     </blockquote>
                     
                     <div className="flex items-center justify-center space-x-4">
-                      <img src={testimonials[currentTestimonial].avatar} alt={`${testimonials[currentTestimonial].name} profile picture`} className="w-16 h-16 rounded-full object-cover ring-2 ring-accent-primary/20" />
+                      <img src={testimonials[currentTestimonial].avatar} alt={`${testimonials[currentTestimonial].name} profile picture`} className="w-16 h-16 rounded-full object-cover ring-2 ring-blue-600/20" />
                       <div className="text-left">
-                        <p className="font-semibold text-text-primary">
+                        <p className="font-semibold text-gray-900">
                           {testimonials[currentTestimonial].name}
                         </p>
-                        <p className="text-text-tertiary">
+                        <p className="text-gray-500">
                           {testimonials[currentTestimonial].role}
                         </p>
                       </div>
@@ -368,15 +371,15 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
 
             {/* Navigation Arrows */}
             <div className="flex justify-center space-x-4 mt-8">
-              <Button variant="tertiary" size="sm" onClick={prevTestimonial} className="rounded-full" aria-label="Previous testimonial">
+              <Button variant="tertiary" size="sm" onClick={prevTestimonial} className="rounded-full bg-white border border-gray-200 hover:bg-gray-50" aria-label="Previous testimonial">
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               
               <div className="flex space-x-2 items-center">
-                {testimonials.map((_, index) => <button key={index} onClick={() => setCurrentTestimonial(index)} className={`w-2 h-2 rounded-full transition-colors ${index === currentTestimonial ? "bg-accent-primary" : "bg-border-default"}`} aria-label={`Go to testimonial ${index + 1}`} />)}
+                {testimonials.map((_, index) => <button key={index} onClick={() => setCurrentTestimonial(index)} className={cn("w-2 h-2 rounded-full transition-colors", index === currentTestimonial ? "bg-blue-600" : "bg-gray-300")} aria-label={`Go to testimonial ${index + 1}`} />)}
               </div>
               
-              <Button variant="tertiary" size="sm" onClick={nextTestimonial} className="rounded-full" aria-label="Next testimonial">
+              <Button variant="tertiary" size="sm" onClick={nextTestimonial} className="rounded-full bg-white border border-gray-200 hover:bg-gray-50" aria-label="Next testimonial">
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
@@ -385,7 +388,7 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-accent-primary/5">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-blue-50">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <motion.div initial={{
           opacity: 0,
@@ -398,10 +401,10 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
         }} viewport={{
           once: true
         }} className="space-y-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
               Ready to Enhance Your Practice?
             </h2>
-            <p className="text-xl text-text-secondary">
+            <p className="text-xl text-gray-600">
               Join ophthalmic professionals who trust VisionTest for accurate, 
               efficient visual field testing and comprehensive patient management.
             </p>
@@ -419,55 +422,55 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
       </section>
 
       {/* Footer */}
-      <footer className="bg-background-secondary py-12 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
+      <footer className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Logo and Description */}
             <div className="md:col-span-2 space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
-                  <Eye className="w-5 h-5 text-white" aria-hidden="true" />
+                <div className="p-2 bg-blue-600/10 rounded-lg">
+                  <Eye className="h-6 w-6 text-blue-600" aria-hidden="true" />
                 </div>
-                <h3 className="text-xl font-bold text-text-primary">VisionTest</h3>
+                <h3 className="text-xl font-bold text-gray-900">VisionTest</h3>
               </div>
-              <p className="text-text-secondary max-w-md">
+              <p className="text-gray-600 max-w-md">
                 Professional visual field testing platform designed for modern 
                 ophthalmology practices and ophthalmic technicians.
               </p>
               <div className="flex space-x-4">
-                <button className="p-2 rounded-lg hover:bg-background-tertiary transition-colors" aria-label="Twitter">
-                  <Twitter className="h-5 w-5 text-text-tertiary hover:text-text-primary" />
+                <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Twitter">
+                  <Twitter className="h-5 w-5 text-gray-500 hover:text-gray-900" />
                 </button>
-                <button className="p-2 rounded-lg hover:bg-background-tertiary transition-colors" aria-label="LinkedIn">
-                  <Linkedin className="h-5 w-5 text-text-tertiary hover:text-text-primary" />
+                <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="LinkedIn">
+                  <Linkedin className="h-5 w-5 text-gray-500 hover:text-gray-900" />
                 </button>
-                <button className="p-2 rounded-lg hover:bg-background-tertiary transition-colors" aria-label="Facebook">
-                  <Facebook className="h-5 w-5 text-text-tertiary hover:text-text-primary" />
+                <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Facebook">
+                  <Facebook className="h-5 w-5 text-gray-500 hover:text-gray-900" />
                 </button>
               </div>
             </div>
 
             {/* Quick Links */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-text-primary">Platform</h4>
+              <h4 className="font-semibold text-gray-900">Platform</h4>
               <ul className="space-y-2">
                 <li>
-                  <button onClick={() => scrollToSection("#features")} className="text-text-secondary hover:text-text-primary transition-colors">
+                  <button onClick={() => scrollToSection("#features")} className="text-gray-600 hover:text-gray-900 transition-colors">
                     Features
                   </button>
                 </li>
                 <li>
-                  <button onClick={handleWatchDemo} className="text-text-secondary hover:text-text-primary transition-colors">
+                  <button onClick={handleWatchDemo} className="text-gray-600 hover:text-gray-900 transition-colors">
                     Demo
                   </button>
                 </li>
                 <li>
-                  <button onClick={handleGetStarted} className="text-text-secondary hover:text-text-primary transition-colors">
+                  <button onClick={handleGetStarted} className="text-gray-600 hover:text-gray-900 transition-colors">
                     Sign In
                   </button>
                 </li>
                 <li>
-                  <a href="#" className="text-text-secondary hover:text-text-primary transition-colors">
+                  <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
                     Documentation
                   </a>
                 </li>
@@ -476,11 +479,11 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
 
             {/* Contact */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-text-primary">Support</h4>
+              <h4 className="font-semibold text-gray-900">Support</h4>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 text-text-tertiary" />
-                  <a href="mailto:support@visiontest.com" className="text-text-secondary hover:text-text-primary transition-colors">
+                  <Mail className="h-4 w-4 text-gray-500" />
+                  <a href="mailto:support@visiontest.com" className="text-gray-600 hover:text-gray-900 transition-colors">
                     support@visiontest.com
                   </a>
                 </div>
@@ -488,8 +491,8 @@ export default function LandingPageSingle({}: LandingPageSingleProps) {
             </div>
           </div>
 
-          <div className="border-t border-border-subtle mt-8 pt-8 text-center">
-            <p className="text-text-tertiary">
+          <div className="border-t border-gray-200 mt-8 pt-8 text-center">
+            <p className="text-gray-500">
               © 2024 VisionTest Clinical Platform. All rights reserved.
             </p>
           </div>
