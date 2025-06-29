@@ -1,0 +1,95 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from './components/layout/Layout';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { SignIn } from './components/auth/SignIn';
+import { SignUp } from './components/auth/SignUp';
+import { Dashboard } from './pages/Dashboard';
+import { TestSetup } from './pages/TestSetup';
+import { VisualFieldTest } from './pages/VisualFieldTest';
+import { Results } from './pages/Results';
+import { Patients } from './pages/Patients';
+import { Settings } from './pages/Settings';
+import { SupabaseTestPage } from './pages/SupabaseTestPage';
+import { useDatabase } from './hooks/useDatabase';
+import { useAuth } from './hooks/useAuth';
+
+function App() {
+  const { loading: authLoading } = useAuth();
+  
+  // Initialize database connection and load data only when authenticated
+  useDatabase();
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background-primary flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-accent-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-text-secondary">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Router>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        
+        {/* Test route - accessible without authentication for debugging */}
+        <Route path="/test-supabase" element={<SupabaseTestPage />} />
+        
+        {/* Protected routes */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/setup" element={
+          <ProtectedRoute>
+            <Layout>
+              <TestSetup />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/test" element={
+          <ProtectedRoute>
+            <Layout>
+              <VisualFieldTest />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/results" element={
+          <ProtectedRoute>
+            <Layout>
+              <Results />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/patients" element={
+          <ProtectedRoute>
+            <Layout>
+              <Patients />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <Layout>
+              <Settings />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Redirect any unknown routes to dashboard */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;

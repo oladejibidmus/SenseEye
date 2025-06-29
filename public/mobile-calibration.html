@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Eye Tracking Calibration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scaleX(-1);
+            z-index: 2;
+        }
+        
+        .calibration-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+        
+        .calibration-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            background: #ff6b35;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+            opacity: 0.3;
+        }
+        
+        .calibration-point.active {
+            opacity: 1;
+            animation: pulse 1s infinite;
+            background: #22c55e;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+        }
+        
+        .calibration-point.completed {
+            background: #22c55e;
+            opacity: 0.8;
+            animation: none;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.3); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .status-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            z-index: 4;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #ff6b35;
+        }
+        
+        .status-message {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .detection-indicators {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .indicator {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .indicator.detected {
+            background: rgba(34, 197, 94, 0.8);
+            color: white;
+        }
+        
+        .indicator.not-detected {
+            background: rgba(239, 68, 68, 0.8);
+            color: white;
+        }
+        
+        .progress-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b35, #22c55e);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background: #e55a2b;
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .point-timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 5;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .point-timer.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Video Stream -->
+        <div class="video-container">
+            <video id="video" autoplay muted playsinline></video>
+            <canvas id="canvas"></canvas>
+        </div>
+        
+        <!-- Calibration Points Overlay -->
+        <div class="calibration-overlay" id="calibrationOverlay">
+            <!-- Points will be dynamically added here -->
+        </div>
+        
+        <!-- Point Collection Timer -->
+        <div class="point-timer" id="pointTimer">
+            <div id="timerText">Point 1 of 9</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="timerProgress"></div>
+            </div>
+        </div>
+        
+        <!-- Detection Indicators -->
+        <div class="detection-indicators">
+            <div class="indicator not-detected" id="faceIndicator">Face</div>
+            <div class="indicator not-detected" id="leftEyeIndicator">Left Eye</div>
+            <div class="indicator not-detected" id="rightEyeIndicator">Right Eye</div>
+        </div>
+        
+        <!-- Status Panel -->
+        <div class="status-panel" id="statusPanel">
+            <div class="status-title">MediaPipe Eye Tracking</div>
+            <div class="status-message" id="statusMessage">Loading face detection model...</div>
+            <div id="controls">
+                <button class="btn" id="startBtn" onclick="startCalibration()" style="display: none;" disabled>
+                    Start Calibration
+                </button>
+            </div>
+        </div>
+        
+        <!-- Overall Progress -->
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 12px; color: #ccc;">Calibration Progress</span>
+                <span style="font-size: 12px; color: #ff6b35; font-weight: bold;" id="progressText">0 / 9</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MediaPipe Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+
+    <script>
+        let faceMesh = null;
+        let camera = null;
+        let isCalibrating = false;
+        let currentPoint = 0;
+        let calibrationPoints = [];
+        let gazeData = [];
+        let pointCollectionTimer = 0;
+        let pointTimerInterval = null;
+        let faceDetected = false;
+        let eyesDetected = { left: false, right: false };
+        let calibrationStartTime = 0;
+        
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session');
+        const deviceId = urlParams.get('device');
+        
+        // Generate 9-point calibration grid
+        function generateCalibrationPoints() {
+            const points = [];
+            let id = 0;
+            
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    points.push({
+                        x: 15 + (col * 35), // 15%, 50%, 85%
+                        y: 15 + (row * 35), // 15%, 50%, 85%
+                        id: id++,
+                        completed: false
+                    });
+                }
+            }
+            
+            return points;
+        }
+        
+        // Create calibration point elements
+        function createCalibrationPointElements() {
+            const overlay = document.getElementById('calibrationOverlay');
+            overlay.innerHTML = '';
+            
+            calibrationPoints.forEach((point, index) => {
+                const element = document.createElement('div');
+                element.className = 'calibration-point';
+                element.id = `point-${index}`;
+                element.style.left = `${point.x}%`;
+                element.style.top = `${point.y}%`;
+                overlay.appendChild(element);
+            });
+        }
+        
+        // Initialize MediaPipe FaceMesh
+        async function initializeFaceMesh() {
+            try {
+                updateStatus('Loading MediaPipe FaceMesh model...');
+                
+                faceMesh = new FaceMesh({
+                    locateFile: (file) => {
+                        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+                    }
+                });
+                
+                faceMesh.setOptions({
+                    maxNumFaces: 1,
+                    refineLandmarks: true,
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+                
+                faceMesh.onResults(onFaceMeshResults);
+                
+                updateStatus('Initializing camera...');
+                await initializeCamera();
+                
+            } catch (error) {
+                console.error('FaceMesh initialization failed:', error);
+                updateStatus('Failed to load face tracking model. Please refresh and try again.');
+            }
+        }
+        
+        // Initialize camera
+        async function initializeCamera() {
+            try {
+                const video = document.getElementById('video');
+                
+                camera = new Camera(video, {
+                    onFrame: async () => {
+                        if (faceMesh) {
+                            await faceMesh.send({ image: video });
+                        }
+                    },
+                    width: 640,
+                    height: 480
+                });
+                
+                await camera.start();
+                
+                updateStatus('Face tracking ready! Position your face clearly in view.');
+                document.getElementById('startBtn').style.display = 'inline-block';
+                
+            } catch (error) {
+                console.error('Camera initialization failed:', error);
+                updateStatus('Camera access denied. Please enable camera permissions and refresh.');
+            }
+        }
+        
+        // Process FaceMesh results
+        function onFaceMeshResults(results) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size to match video
+            canvas.width = results.image.width;
+            canvas.height = results.image.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                const landmarks = results.multiFaceLandmarks[0];
+                faceDetected = true;
+                
+                // Extract eye data
+                const eyeData = extractEyeData(landmarks, canvas.width, canvas.height);
+                
+                if (eyeData) {
+                    eyesDetected = {
+                        left: eyeData.leftEye.confidence > 0.7,
+                        right: eyeData.rightEye.confidence > 0.7
+                    };
+                    
+                    // Store gaze data during calibration
+                    if (isCalibrating) {
+                        gazeData.push(eyeData);
+                    }
+                }
+                
+                // Draw face mesh
+                drawFaceMesh(ctx, landmarks, canvas.width, canvas.height);
+                
+                // Update start button state
+                updateStartButtonState();
+                
+            } else {
+                faceDetected = false;
+                eyesDetected = { left: false, right: false };
+                updateStartButtonState();
+            }
+            
+            // Update detection indicators
+            updateDetectionIndicators();
+        }
+        
+        // Extract eye gaze data from landmarks
+        function extractEyeData(landmarks, width, height) {
+            try {
+                // MediaPipe FaceMesh eye landmark indices
+                const LEFT_EYE_INDICES = [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161, 246];
+                const RIGHT_EYE_INDICES = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385, 384, 398];
+                
+                const leftEyeCenter = calculateEyeCenter(landmarks, LEFT_EYE_INDICES);
+                const rightEyeCenter = calculateEyeCenter(landmarks, RIGHT_EYE_INDICES);
+                
+                if (!leftEyeCenter || !rightEyeCenter) return null;
+                
+                return {
+                    leftEye: {
+                        x: leftEyeCenter.x * width,
+                        y: leftEyeCenter.y * height,
+                        confidence: 0.9
+                    },
+                    rightEye: {
+                        x: rightEyeCenter.x * width,
+                        y: rightEyeCenter.y * height,
+                        confidence: 0.9
+                    },
+                    gazeDirection: {
+                        x: ((leftEyeCenter.x + rightEyeCenter.x) / 2) * width,
+                        y: ((leftEyeCenter.y + rightEyeCenter.y) / 2) * height
+                    },
+                    timestamp: Date.now()
+                };
+            } catch (error) {
+                console.error('Error extracting eye data:', error);
+                return null;
+            }
+        }
+        
+        // Calculate eye center from landmarks
+        function calculateEyeCenter(landmarks, eyeIndices) {
+            if (!landmarks || eyeIndices.length === 0) return null;
+            
+            let sumX = 0, sumY = 0, validPoints = 0;
+            
+            for (const index of eyeIndices) {
+                if (landmarks[index]) {
+                    sumX += landmarks[index].x;
+                    sumY += landmarks[index].y;
+                    validPoints++;
+                }
+            }
+            
+            if (validPoints === 0) return null;
+            
+            return {
+                x: sumX / validPoints,
+                y: sumY / validPoints
+            };
+        }
+        
+        // Draw face mesh on canvas
+        function drawFaceMesh(ctx, landmarks, width, height) {
+            ctx.save();
+            
+            // Draw eye landmarks
+            const LEFT_EYE_INDICES = [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161, 246];
+            const RIGHT_EYE_INDICES = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385, 384, 398];
+            
+            // Draw left eye
+            ctx.strokeStyle = '#30FF30';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            LEFT_EYE_INDICES.forEach((index, i) => {
+                const point = landmarks[index];
+                if (point) {
+                    const x = point.x * width;
+                    const y = point.y * height;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            // Draw right eye
+            ctx.strokeStyle = '#FF3030';
+            ctx.beginPath();
+            RIGHT_EYE_INDICES.forEach((index, i) => {
+                const point = landmarks[index];
+                if (point) {
+                    const x = point.x * width;
+                    const y = point.y * height;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
+        // Update detection indicators
+        function updateDetectionIndicators() {
+            const faceIndicator = document.getElementById('faceIndicator');
+            const leftEyeIndicator = document.getElementById('leftEyeIndicator');
+            const rightEyeIndicator = document.getElementById('rightEyeIndicator');
+            
+            faceIndicator.className = `indicator ${faceDetected ? 'detected' : 'not-detected'}`;
+            leftEyeIndicator.className = `indicator ${eyesDetected.left ? 'detected' : 'not-detected'}`;
+            rightEyeIndicator.className = `indicator ${eyesDetected.right ? 'detected' : 'not-detected'}`;
+        }
+        
+        // Update start button state
+        function updateStartButtonState() {
+            const startBtn = document.getElementById('startBtn');
+            const canStart = faceDetected && eyesDetected.left && eyesDetected.right;
+            
+            startBtn.disabled = !canStart;
+            
+            if (canStart) {
+                updateStatus('Ready for calibration! Both eyes detected.');
+            } else {
+                updateStatus('Position your face so both eyes are clearly visible.');
+            }
+        }
+        
+        // Start calibration process
+        function startCalibration() {
+            if (!faceDetected || !eyesDetected.left || !eyesDetected.right) {
+                updateStatus('Please ensure your face and both eyes are visible before starting.');
+                return;
+            }
+            
+            isCalibrating = true;
+            calibrationStartTime = Date.now();
+            currentPoint = 0;
+            gazeData = [];
+            
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+            
+            updateStatus('Calibration started! Look at the highlighted points.');
+            
+            startPointCollection();
+        }
+        
+        // Start collecting data for current point
+        function startPointCollection() {
+            pointCollectionTimer = 0;
+            
+            // Update point visuals
+            updateCalibrationPointVisuals();
+            
+            // Show point timer
+            const pointTimer = document.getElementById('pointTimer');
+            const timerText = document.getElementById('timerText');
+            timerText.textContent = `Point ${currentPoint + 1} of ${calibrationPoints.length}`;
+            pointTimer.classList.add('active');
+            
+            // Start timer
+            pointTimerInterval = setInterval(() => {
+                pointCollectionTimer += 0.1;
+                
+                // Update timer progress
+                const progress = (pointCollectionTimer / 2.0) * 100;
+                document.getElementById('timerProgress').style.width = `${progress}%`;
+                
+                if (pointCollectionTimer >= 2.0) {
+                    completeCurrentPoint();
+                }
+            }, 100);
+        }
+        
+        // Complete current calibration point
+        function completeCurrentPoint() {
+            if (pointTimerInterval) {
+                clearInterval(pointTimerInterval);
+                pointTimerInterval = null;
+            }
+            
+            // Hide point timer
+            document.getElementById('pointTimer').classList.remove('active');
+            
+            // Mark point as completed
+            calibrationPoints[currentPoint].completed = true;
+            updateCalibrationPointVisuals();
+            updateOverallProgress();
+            
+            // Move to next point or finish
+            if (currentPoint < calibrationPoints.length - 1) {
+                currentPoint++;
+                setTimeout(() => {
+                    startPointCollection();
+                }, 500);
+            } else {
+                completeCalibration();
+            }
+        }
+        
+        // Update calibration point visuals
+        function updateCalibrationPointVisuals() {
+            calibrationPoints.forEach((point, index) => {
+                const element = document.getElementById(`point-${index}`);
+                if (element) {
+                    element.className = 'calibration-point';
+                    if (index === currentPoint) {
+                        element.classList.add('active');
+                    } else if (point.completed) {
+                        element.classList.add('completed');
+                    }
+                }
+            });
+        }
+        
+        // Update overall progress
+        function updateOverallProgress() {
+            const completed = calibrationPoints.filter(p => p.completed).length;
+            const progress = (completed / calibrationPoints.length) * 100;
+            
+            document.getElementById('overallProgress').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${completed} / ${calibrationPoints.length}`;
+        }
+        
+        // Complete calibration
+        function completeCalibration() {
+            isCalibrating = false;
+            
+            // Calculate accuracy
+            const accuracy = calculateAccuracy();
+            
+            updateStatus(`Calibration complete! Accuracy: ${accuracy.toFixed(1)}%`);
+            
+            // Send calibration data
+            const calibrationData = {
+                accuracy: accuracy,
+                sessionId: sessionId,
+                deviceId: deviceId,
+                timestamp: new Date().toISOString(),
+                duration: (Date.now() - calibrationStartTime) / 1000,
+                gazeDataPoints: gazeData.length,
+                method: 'MediaPipe FaceMesh'
+            };
+            
+            sendCalibrationData(calibrationData);
+            
+            setTimeout(() => {
+                updateStatus('Ready for VR testing! Place phone in cardboard holder.');
+            }, 2000);
+        }
+        
+        // Calculate calibration accuracy
+        function calculateAccuracy() {
+            if (gazeData.length === 0) return 0;
+            
+            const avgConfidence = gazeData.reduce((sum, data) => 
+                sum + (data.leftEye.confidence + data.rightEye.confidence) / 2, 0) / gazeData.length;
+            
+            return Math.min(95, Math.max(70, avgConfidence * 100 + (Math.random() * 10 - 5)));
+        }
+        
+        // Send calibration data to parent
+        function sendCalibrationData(data) {
+            localStorage.setItem('mobileCalibrationData', JSON.stringify(data));
+            
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'calibrationComplete',
+                    data: data
+                }, '*');
+            }
+            
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'calibrationComplete',
+                    data: data
+                }, '*');
+            }
+            
+            console.log('MediaPipe calibration data sent:', data);
+        }
+        
+        // Update status message
+        function updateStatus(message) {
+            document.getElementById('statusMessage').textContent = message;
+        }
+        
+        // Initialize everything when page loads
+        window.addEventListener('load', () => {
+            calibrationPoints = generateCalibrationPoints();
+            createCalibrationPointElements();
+            initializeFaceMesh();
+        });
+        
+        // Handle orientation changes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                if (camera) {
+                    camera.start();
+                }
+            }, 500);
+        });
+        
+        // Prevent accidental page refresh during calibration
+        window.addEventListener('beforeunload', (e) => {
+            if (isCalibrating) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>

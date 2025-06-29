@@ -1,0 +1,151 @@
+import { Patient, TestResult, Appointment } from '../types';
+
+export const mockPatients: Patient[] = [
+  {
+    id: '1',
+    firstName: 'Sarah',
+    lastName: 'Johnson',
+    dateOfBirth: '1965-03-15',
+    email: 'sarah.johnson@email.com',
+    phone: '(555) 123-4567',
+    address: '123 Main St, Springfield, IL 62701',
+    medicalHistory: ['Glaucoma', 'Hypertension'],
+    insuranceProvider: 'Blue Cross Blue Shield',
+    avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
+    lastVisit: '2024-01-15',
+    nextAppointment: '2024-02-15',
+    status: 'active',
+    totalTests: 8,
+  },
+  {
+    id: '2',
+    firstName: 'Michael',
+    lastName: 'Chen',
+    dateOfBirth: '1972-08-22',
+    email: 'michael.chen@email.com',
+    phone: '(555) 234-5678',
+    address: '456 Oak Ave, Springfield, IL 62702',
+    medicalHistory: ['Diabetic Retinopathy', 'Type 2 Diabetes'],
+    insuranceProvider: 'Aetna',
+    avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
+    lastVisit: '2024-01-20',
+    nextAppointment: '2024-02-20',
+    status: 'active',
+    totalTests: 12,
+  },
+  {
+    id: '3',
+    firstName: 'Emma',
+    lastName: 'Rodriguez',
+    dateOfBirth: '1958-11-03',
+    email: 'emma.rodriguez@email.com',
+    phone: '(555) 345-6789',
+    address: '789 Pine St, Springfield, IL 62703',
+    medicalHistory: ['Age-related Macular Degeneration'],
+    insuranceProvider: 'Medicare',
+    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
+    lastVisit: '2024-01-10',
+    status: 'active',
+    totalTests: 15,
+  },
+  {
+    id: '4',
+    firstName: 'David',
+    lastName: 'Williams',
+    dateOfBirth: '1980-05-18',
+    email: 'david.williams@email.com',
+    phone: '(555) 456-7890',
+    address: '321 Elm St, Springfield, IL 62704',
+    medicalHistory: ['Myopia', 'Family History of Glaucoma'],
+    insuranceProvider: 'Cigna',
+    avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
+    lastVisit: '2024-01-25',
+    nextAppointment: '2024-03-01',
+    status: 'active',
+    totalTests: 3,
+  },
+];
+
+export const mockTestResults: TestResult[] = [
+  {
+    id: '1',
+    patientId: '1',
+    testType: '24-2',
+    strategy: 'SITA Standard',
+    eye: 'OD',
+    date: '2024-01-15',
+    duration: 285,
+    reliability: {
+      falsePositives: 2,
+      falseNegatives: 1,
+      fixationLosses: 0,
+      score: 98,
+    },
+    indices: {
+      md: -2.4,
+      psd: 3.2,
+      vfi: 94,
+      ght: 'Within Normal Limits',
+    },
+    visualFieldData: Array(8).fill(null).map(() => Array(8).fill(null).map(() => Math.floor(Math.random() * 40) - 5)),
+    notes: 'Patient cooperative, reliable test results.',
+    status: 'completed',
+  },
+  {
+    id: '2',
+    patientId: '2',
+    testType: '30-2',
+    strategy: 'SITA Fast',
+    eye: 'OS',
+    date: '2024-01-20',
+    duration: 195,
+    reliability: {
+      falsePositives: 1,
+      falseNegatives: 3,
+      fixationLosses: 2,
+      score: 95,
+    },
+    indices: {
+      md: -4.1,
+      psd: 5.8,
+      vfi: 88,
+      ght: 'Borderline',
+    },
+    visualFieldData: Array(10).fill(null).map(() => Array(10).fill(null).map(() => Math.floor(Math.random() * 40) - 8)),
+    notes: 'Some peripheral defects noted, recommend follow-up.',
+    status: 'completed',
+  },
+];
+
+export const mockAppointments: Appointment[] = [
+  {
+    id: '1',
+    patientId: '1',
+    date: '2024-02-15',
+    time: '09:00',
+    type: 'Visual Field Test',
+    status: 'scheduled',
+  },
+  {
+    id: '2',
+    patientId: '2',
+    date: '2024-02-15',
+    time: '10:30',
+    type: 'Follow-up Exam',
+    status: 'scheduled',
+  },
+  {
+    id: '3',
+    patientId: '4',
+    date: '2024-02-15',
+    time: '14:00',
+    type: 'Initial Consultation',
+    status: 'scheduled',
+  },
+];
+
+export const generateVisualFieldData = () => {
+  return Array(8).fill(null).map(() => 
+    Array(8).fill(null).map(() => Math.floor(Math.random() * 40) - 5)
+  );
+};
