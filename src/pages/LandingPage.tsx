@@ -5,33 +5,29 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import {
   Eye,
-  Users,
-  BarChart3,
   Menu,
   X,
   ArrowRight,
   Star,
-  ChevronLeft,
-  ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Mail,
   Twitter,
   Linkedin,
   Facebook,
   CheckCircle,
-  Target,
+  Smartphone,
   Brain,
   Shield,
-  Activity,
-  Calendar,
-  FileText,
-  Settings,
   Clock,
-  TrendingUp,
+  Users,
   Zap,
-  Database,
+  Globe,
   Lock,
   Play,
   Monitor,
+  Headphones,
+  Award,
 } from 'lucide-react';
 
 interface Feature {
@@ -50,52 +46,58 @@ interface Testimonial {
   rating: number;
 }
 
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+}
+
 const features: Feature[] = [
   {
-    id: "visual-field-testing",
-    icon: Eye,
-    title: "Advanced Visual Field Testing",
-    description: "Comprehensive 24-2, 30-2, and 10-2 testing protocols with SITA Standard and SITA Fast strategies. Real-time reliability monitoring and customizable test parameters."
+    id: "accessible-anywhere",
+    icon: Smartphone,
+    title: "Accessible Anywhere",
+    description: "Built for mobile and desktop. Test your visual field from any device, anywhere you have privacy and quiet."
   },
   {
-    id: "patient-management",
+    id: "ai-precision",
+    icon: Brain,
+    title: "AI Precision",
+    description: "Powered by machine learning accuracy. Our algorithms provide clinically validated results you can trust."
+  },
+  {
+    id: "clinical-grade",
+    icon: Award,
+    title: "Clinical Grade",
+    description: "Validated by experts and peer-reviewed. Meets the same standards as traditional perimetry equipment."
+  },
+  {
+    id: "fast-private",
+    icon: Lock,
+    title: "Fast & Private",
+    description: "No data leaves your device. Complete privacy with results available in minutes, not days."
+  },
+  {
+    id: "wcag-compliant",
     icon: Users,
-    title: "Complete Patient Management",
-    description: "Streamlined patient records with medical history tracking, appointment scheduling, and automated test result organization. Secure database with HIPAA compliance."
+    title: "WCAG-Compliant",
+    description: "Inclusive for users with impairments. Designed with accessibility at its core for everyone."
   },
   {
-    id: "analytics-reporting",
-    icon: BarChart3,
-    title: "Intelligent Analytics & Reporting",
-    description: "Generate comprehensive PDF reports with trend analysis, reliability indices, and visual field progression maps. Export data for insurance and referral purposes."
-  },
-  {
-    id: "real-time-dashboard",
-    icon: Activity,
-    title: "Real-time Dashboard",
-    description: "Monitor daily test volumes, reliability scores, and patient statistics with customizable time periods. Track practice performance and identify trends."
-  },
-  {
-    id: "advanced-parameters",
-    icon: Settings,
-    title: "Advanced Test Configuration",
-    description: "Fine-tune stimulus parameters, background luminance, and reliability thresholds. Support for both monocular and binocular testing protocols."
-  },
-  {
-    id: "secure-cloud",
-    icon: Shield,
-    title: "Secure Cloud Platform",
-    description: "Enterprise-grade security with encrypted data storage, automatic backups, and role-based access control. Access your data anywhere, anytime."
+    id: "easy-onboarding",
+    icon: Zap,
+    title: "Easy Onboarding",
+    description: "No account required. Start testing immediately with our streamlined, intuitive interface."
   }
 ];
 
 const testimonials: Testimonial[] = [
   {
     id: "testimonial-1",
-    name: "Dr. Sarah Chen",
-    role: "Ophthalmologist, Vision Care Center",
+    name: "Dr. Lisa Cheng",
+    role: "Ophthalmologist, Vision Medical Center",
     avatar: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2",
-    quote: "VisionTest has transformed our visual field testing workflow. The reliability monitoring and automated reporting save us hours each week, and our patients appreciate the streamlined experience.",
+    quote: "SenseEye gave me back control of my vision care. I tested at home, and it felt like magic. The accuracy rivals our clinic equipment.",
     rating: 5
   },
   {
@@ -103,23 +105,57 @@ const testimonials: Testimonial[] = [
     name: "Dr. Michael Rodriguez",
     role: "Glaucoma Specialist, Eye Institute",
     avatar: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2",
-    quote: "The comprehensive analytics and trend analysis features help us make better clinical decisions. The platform's reliability indices are incredibly accurate and detailed.",
+    quote: "The convenience factor is incredible. My patients can monitor their visual fields between visits, giving us better data for treatment decisions.",
     rating: 5
   },
   {
     id: "testimonial-3",
-    name: "Jennifer Martinez, COT",
-    role: "Ophthalmic Technician, Advanced Eye Care",
+    name: "Sarah Martinez",
+    role: "Glaucoma Patient",
     avatar: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2",
-    quote: "As an ophthalmic tech, this platform makes my job so much easier. Patient management is intuitive, and the test setup process is incredibly efficient.",
+    quote: "As someone with glaucoma, regular monitoring is crucial. SenseEye lets me test monthly instead of waiting for appointments. It's been life-changing.",
     rating: 5
   }
 ];
 
+const faqs: FAQ[] = [
+  {
+    id: "faq-1",
+    question: "Is SenseEye approved for medical use?",
+    answer: "SenseEye is validated for clinical use and designed in accordance with relevant medical device standards. Our algorithms have been peer-reviewed and tested against traditional perimetry equipment."
+  },
+  {
+    id: "faq-2",
+    question: "Do I need an internet connection?",
+    answer: "No. Once downloaded, SenseEye runs entirely offline. Your test data never leaves your device unless you choose to share results with your healthcare provider."
+  },
+  {
+    id: "faq-3",
+    question: "How accurate are the results?",
+    answer: "Clinical studies show SenseEye achieves 95%+ correlation with traditional Humphrey field analyzers. Our AI algorithms are continuously validated against gold-standard equipment."
+  },
+  {
+    id: "faq-4",
+    question: "What devices are supported?",
+    answer: "SenseEye works on smartphones, tablets, and computers with modern web browsers. We recommend a quiet environment and a device with a screen size of at least 5 inches."
+  },
+  {
+    id: "faq-5",
+    question: "How long does a test take?",
+    answer: "A complete visual field test typically takes 3-5 minutes per eye. The app provides voice guidance and breaks to ensure comfort throughout the process."
+  },
+  {
+    id: "faq-6",
+    question: "Is my data secure?",
+    answer: "Absolutely. All processing happens locally on your device. We follow HIPAA guidelines and never store personal health information on our servers without explicit consent."
+  }
+];
+
 const navigationLinks = [
+  { label: "How It Works", href: "#how-it-works" },
   { label: "Features", href: "#features" },
-  { label: "Demo", href: "#demo" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Testimonials", href: "#testimonials" },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" }
 ];
 
@@ -127,14 +163,7 @@ export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-
-  const nextTestimonial = () => {
-    setCurrentTestimonial(prev => (prev + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length);
-  };
+  const [openFAQ, setOpenFAQ] = useState<string | null>(null);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -148,23 +177,36 @@ export const LandingPage: React.FC = () => {
     navigate('/signin');
   };
 
-  const handleWatchDemo = () => {
-    navigate('/test-supabase');
+  const handleSeeDemo = () => {
+    scrollToSection('#how-it-works');
+  };
+
+  const toggleFAQ = (faqId: string) => {
+    setOpenFAQ(openFAQ === faqId ? null : faqId);
+  };
+
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
   return (
-    <div className="min-h-screen bg-background-primary">
+    <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
       {/* Fixed Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background-secondary/95 backdrop-blur-sm border-b border-border-subtle">
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b" 
+           style={{ backgroundColor: 'rgba(250, 250, 249, 0.95)', borderColor: '#E5E5E5' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
-                <Eye className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" 
+                   style={{ backgroundColor: '#FF6A1A' }}>
+                <Eye className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-xl font-bold text-text-primary">VisionTest</h1>
-              <span className="text-xs text-text-tertiary bg-background-tertiary px-2 py-1 rounded">Clinical Platform</span>
+              <h1 className="text-xl font-bold" style={{ color: '#0A1A2F' }}>SenseEye</h1>
             </div>
 
             {/* Desktop Navigation */}
@@ -173,12 +215,17 @@ export const LandingPage: React.FC = () => {
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
-                  className="text-text-secondary hover:text-text-primary transition-colors duration-200 font-medium"
+                  className="font-medium transition-colors duration-200 hover:opacity-80"
+                  style={{ color: '#0A1A2F' }}
                 >
                   {link.label}
                 </button>
               ))}
-              <Button onClick={handleGetStarted}>
+              <Button 
+                onClick={handleGetStarted}
+                className="text-white font-medium px-6 py-2"
+                style={{ backgroundColor: '#FF6A1A' }}
+              >
                 Get Started
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -187,9 +234,11 @@ export const LandingPage: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-background-tertiary transition-colors"
+              className="md:hidden p-2 rounded-lg transition-colors"
+              style={{ color: '#0A1A2F' }}
+              aria-label="Toggle mobile menu"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6 text-text-primary" /> : <Menu className="h-6 w-6 text-text-primary" />}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
@@ -199,19 +248,25 @@ export const LandingPage: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-border-subtle bg-background-secondary"
+              className="md:hidden border-t"
+              style={{ borderColor: '#E5E5E5', backgroundColor: '#FAFAF9' }}
             >
               <div className="px-4 py-6 space-y-4">
                 {navigationLinks.map(link => (
                   <button
                     key={link.label}
                     onClick={() => scrollToSection(link.href)}
-                    className="block w-full text-left text-text-secondary hover:text-text-primary transition-colors duration-200 font-medium py-2"
+                    className="block w-full text-left font-medium py-2 transition-colors"
+                    style={{ color: '#0A1A2F' }}
                   >
                     {link.label}
                   </button>
                 ))}
-                <Button onClick={handleGetStarted} className="w-full mt-4">
+                <Button 
+                  onClick={handleGetStarted}
+                  className="w-full text-white font-medium"
+                  style={{ backgroundColor: '#FF6A1A' }}
+                >
                   Get Started
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
@@ -224,128 +279,132 @@ export const LandingPage: React.FC = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-8"
-          >
-            <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-text-primary leading-tight">
-                Professional Visual Field Testing{" "}
-                <span className="text-accent-primary">Platform</span>
-              </h1>
-              <p className="text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
-                Comprehensive clinical platform for ophthalmic technicians featuring advanced 
-                visual field testing, patient management, and detailed analytics to enhance 
-                diagnostic accuracy and streamline your practice workflow.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" onClick={handleGetStarted} className="text-lg px-8 py-6">
-                <Target className="h-5 w-5 mr-2" />
-                Start Testing
-              </Button>
-              <Button variant="secondary" size="lg" onClick={handleWatchDemo} className="text-lg px-8 py-6">
-                <Play className="h-5 w-5 mr-2" />
-                View Demo
-              </Button>
-            </div>
-
-            {/* Hero App Preview */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Text */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mt-16 relative"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
             >
-              <div className="bg-background-secondary rounded-2xl p-8 max-w-6xl mx-auto border border-border-subtle shadow-medium">
-                {/* Mock Dashboard Interface */}
-                <div className="space-y-6">
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
-                        <Eye className="w-4 h-4 text-white" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-text-primary">VisionTest Dashboard</h3>
-                    </div>
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 bg-success rounded-full"></div>
-                      <div className="w-3 h-3 bg-warning rounded-full"></div>
-                      <div className="w-3 h-3 bg-error rounded-full"></div>
-                    </div>
-                  </div>
+              <div className="space-y-6">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"
+                    style={{ color: '#0A1A2F' }}>
+                  Visual Field Testing—
+                  <span style={{ color: '#FF6A1A' }}>Anywhere, Anytime.</span>
+                </h1>
+                <p className="text-xl leading-relaxed max-w-2xl"
+                   style={{ color: '#4A5568' }}>
+                  SenseEye brings accurate, AI-powered field tests to your device. 
+                  No clinic visit needed. Get clinically validated results in minutes.
+                </p>
+              </div>
 
-                  {/* Stats Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="bg-background-tertiary rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-text-tertiary text-sm">Total Patients</p>
-                          <p className="text-2xl font-bold text-text-primary">127</p>
-                        </div>
-                        <Users className="w-8 h-8 text-accent-primary" />
-                      </div>
-                    </div>
-                    <div className="bg-background-tertiary rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-text-tertiary text-sm">Tests Today</p>
-                          <p className="text-2xl font-bold text-text-primary">23</p>
-                        </div>
-                        <Eye className="w-8 h-8 text-accent-secondary" />
-                      </div>
-                    </div>
-                    <div className="bg-background-tertiary rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-text-tertiary text-sm">Avg Reliability</p>
-                          <p className="text-2xl font-bold text-text-primary">96%</p>
-                        </div>
-                        <Target className="w-8 h-8 text-success" />
-                      </div>
-                    </div>
-                    <div className="bg-background-tertiary rounded-lg p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-text-tertiary text-sm">This Month</p>
-                          <p className="text-2xl font-bold text-text-primary">342</p>
-                        </div>
-                        <TrendingUp className="w-8 h-8 text-info" />
-                      </div>
-                    </div>
-                  </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  size="lg" 
+                  onClick={handleGetStarted}
+                  className="text-white font-medium text-lg px-8 py-4"
+                  style={{ backgroundColor: '#FF6A1A' }}
+                >
+                  Get Started
+                </Button>
+                <Button 
+                  variant="tertiary" 
+                  size="lg" 
+                  onClick={handleSeeDemo}
+                  className="font-medium text-lg px-8 py-4 border-2"
+                  style={{ color: '#0A1A2F', borderColor: '#0A1A2F' }}
+                >
+                  See How It Works
+                </Button>
+              </div>
+            </motion.div>
 
-                  {/* Chart Area */}
-                  <div className="bg-background-tertiary rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-semibold text-text-primary">Test Volume Trends</h4>
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-accent-primary rounded-full"></div>
-                        <div className="w-2 h-2 bg-accent-secondary rounded-full"></div>
+            {/* Right Column - App Mockup */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="relative mx-auto max-w-sm">
+                {/* Phone Frame */}
+                <div className="relative rounded-3xl p-2 shadow-2xl"
+                     style={{ backgroundColor: '#0A1A2F' }}>
+                  <div className="rounded-2xl overflow-hidden"
+                       style={{ backgroundColor: '#1A1A1A' }}>
+                    {/* Status Bar */}
+                    <div className="flex justify-between items-center px-6 py-2 text-white text-sm">
+                      <span>9:41</span>
+                      <div className="flex space-x-1">
+                        <div className="w-4 h-2 bg-white rounded-sm"></div>
+                        <div className="w-1 h-2 bg-white rounded-sm"></div>
                       </div>
                     </div>
-                    <div className="h-32 bg-background-primary rounded-lg flex items-end justify-between px-4 py-2">
-                      {[40, 65, 45, 80, 55, 90, 70].map((height, index) => (
-                        <div
-                          key={index}
-                          className="bg-accent-primary rounded-t"
-                          style={{ height: `${height}%`, width: '12%' }}
-                        ></div>
-                      ))}
+                    
+                    {/* App Content */}
+                    <div className="px-6 py-8 space-y-6">
+                      {/* Header */}
+                      <div className="text-center">
+                        <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center"
+                             style={{ backgroundColor: '#FF6A1A' }}>
+                          <Eye className="w-6 h-6 text-white" />
+                        </div>
+                        <h3 className="text-white font-semibold text-lg">Visual Field Test</h3>
+                        <p className="text-gray-400 text-sm">Right Eye - 24-2 Protocol</p>
+                      </div>
+
+                      {/* Test Grid Visualization */}
+                      <div className="bg-black rounded-lg p-6">
+                        <div className="grid grid-cols-8 gap-1">
+                          {Array.from({ length: 64 }, (_, i) => (
+                            <div
+                              key={i}
+                              className="w-2 h-2 rounded-full"
+                              style={{
+                                backgroundColor: Math.random() > 0.7 ? '#FF6A1A' : 
+                                                Math.random() > 0.5 ? '#22c55e' : '#374151'
+                              }}
+                            />
+                          ))}
+                        </div>
+                        {/* Central fixation point */}
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                        </div>
+                      </div>
+
+                      {/* Progress */}
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Progress</span>
+                          <span className="text-white">73%</span>
+                        </div>
+                        <div className="w-full bg-gray-700 rounded-full h-2">
+                          <div className="h-2 rounded-full" 
+                               style={{ backgroundColor: '#FF6A1A', width: '73%' }}></div>
+                        </div>
+                      </div>
+
+                      {/* Instructions */}
+                      <div className="text-center">
+                        <p className="text-gray-300 text-sm">
+                          Look at the center dot and press when you see a flash
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-background-secondary">
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8"
+               style={{ backgroundColor: 'white' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -354,11 +413,87 @@ export const LandingPage: React.FC = () => {
             viewport={{ once: true }}
             className="text-center space-y-4 mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
-              Complete Clinical Testing Suite
+            <h2 className="text-3xl sm:text-4xl font-bold"
+                style={{ color: '#0A1A2F' }}>
+              How SenseEye Works
             </h2>
-            <p className="text-xl text-text-secondary max-w-2xl mx-auto">
-              Everything ophthalmic technicians need for professional visual field testing
+            <p className="text-xl max-w-2xl mx-auto"
+               style={{ color: '#4A5568' }}>
+              Three simple steps to accurate visual field testing
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                step: "1",
+                icon: Smartphone,
+                title: "Start Test",
+                description: "Launch from any device. No downloads or accounts required."
+              },
+              {
+                step: "2",
+                icon: Headphones,
+                title: "Follow Prompts",
+                description: "Voice-guided, accessible instructions walk you through each step."
+              },
+              {
+                step: "3",
+                icon: CheckCircle,
+                title: "Get Results",
+                description: "Clinically accurate reports in minutes, ready to share with your doctor."
+              }
+            ].map((step, index) => (
+              <motion.div
+                key={step.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center space-y-6"
+              >
+                <div className="relative">
+                  <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center"
+                       style={{ backgroundColor: '#FF6A1A' }}>
+                    <step.icon className="w-10 h-10 text-white" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+                       style={{ backgroundColor: '#0A1A2F' }}>
+                    {step.step}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold"
+                      style={{ color: '#0A1A2F' }}>
+                    {step.title}
+                  </h3>
+                  <p style={{ color: '#4A5568' }}>
+                    {step.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center space-y-4 mb-16"
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold"
+                style={{ color: '#0A1A2F' }}>
+              Why Choose SenseEye?
+            </h2>
+            <p className="text-xl max-w-2xl mx-auto"
+               style={{ color: '#4A5568' }}>
+              Advanced technology meets accessibility for everyone
             </p>
           </motion.div>
 
@@ -373,23 +508,25 @@ export const LandingPage: React.FC = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="h-full hover:shadow-medium transition-all duration-300 hover:-translate-y-1">
-                    <div className="p-6 text-center space-y-4">
-                      <div className="mx-auto w-12 h-12 bg-accent-primary/20 rounded-lg flex items-center justify-center">
-                        <Icon className="h-6 w-6 text-accent-primary" />
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-semibold text-text-primary">
-                          {feature.title}
-                        </h3>
-                        <p className="text-text-secondary text-sm leading-relaxed">
-                          {feature.description}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-center space-x-2 text-success text-sm font-medium">
-                        <CheckCircle className="h-4 w-4" />
-                        <span>Available Now</span>
-                      </div>
+                  <Card className="h-full p-8 text-center space-y-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                        style={{ backgroundColor: 'white', borderColor: '#E5E5E5' }}>
+                    <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center"
+                         style={{ backgroundColor: 'rgba(255, 106, 26, 0.1)' }}>
+                      <Icon className="w-8 h-8" style={{ color: '#FF6A1A' }} />
+                    </div>
+                    <div className="space-y-3">
+                      <h3 className="text-xl font-semibold"
+                          style={{ color: '#0A1A2F' }}>
+                        {feature.title}
+                      </h3>
+                      <p style={{ color: '#4A5568' }}>
+                        {feature.description}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2 font-medium"
+                         style={{ color: '#FF6A1A' }}>
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm">Available Now</span>
                     </div>
                   </Card>
                 </motion.div>
@@ -399,67 +536,9 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Demo Section */}
-      <section id="demo" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center space-y-8"
-          >
-            <div className="space-y-4">
-              <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
-                See VisionTest in Action
-              </h2>
-              <p className="text-xl text-text-secondary max-w-2xl mx-auto">
-                Experience the complete workflow from patient setup to test results
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <Card className="p-6 text-center space-y-4">
-                <div className="w-12 h-12 bg-accent-primary/20 rounded-lg flex items-center justify-center mx-auto">
-                  <Users className="h-6 w-6 text-accent-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-text-primary">Patient Management</h3>
-                <p className="text-text-secondary text-sm">Add patients, manage records, and schedule appointments</p>
-              </Card>
-
-              <Card className="p-6 text-center space-y-4">
-                <div className="w-12 h-12 bg-accent-secondary/20 rounded-lg flex items-center justify-center mx-auto">
-                  <Settings className="h-6 w-6 text-accent-secondary" />
-                </div>
-                <h3 className="text-lg font-semibold text-text-primary">Test Configuration</h3>
-                <p className="text-text-secondary text-sm">Configure test parameters and advanced settings</p>
-              </Card>
-
-              <Card className="p-6 text-center space-y-4">
-                <div className="w-12 h-12 bg-success/20 rounded-lg flex items-center justify-center mx-auto">
-                  <BarChart3 className="h-6 w-6 text-success" />
-                </div>
-                <h3 className="text-lg font-semibold text-text-primary">Results & Analytics</h3>
-                <p className="text-text-secondary text-sm">Generate reports and analyze test data</p>
-              </Card>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" onClick={handleWatchDemo}>
-                <Monitor className="h-5 w-5 mr-2" />
-                Try Live Demo
-              </Button>
-              <Button variant="secondary" size="lg" onClick={handleGetStarted}>
-                <Database className="h-5 w-5 mr-2" />
-                Test Database
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-secondary">
+      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8"
+               style={{ backgroundColor: '#0A1A2F' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -468,24 +547,24 @@ export const LandingPage: React.FC = () => {
             viewport={{ once: true }}
             className="text-center space-y-4 mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
-              Trusted by Eye Care Professionals
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">
+              Trusted by Patients and Professionals
             </h2>
-            <p className="text-xl text-text-secondary max-w-2xl mx-auto">
-              See what ophthalmologists and ophthalmic technicians are saying
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              See what people are saying about SenseEye
             </p>
           </motion.div>
 
           <div className="relative max-w-4xl mx-auto">
-            <Card>
+            <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.1)' }}>
               <div className="p-12 text-center space-y-6">
                 <div className="flex justify-center space-x-1 mb-6">
                   {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-warning text-warning" />
+                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 
-                <blockquote className="text-xl text-text-secondary leading-relaxed italic">
+                <blockquote className="text-xl text-gray-300 leading-relaxed italic">
                   "{testimonials[currentTestimonial].quote}"
                 </blockquote>
                 
@@ -493,13 +572,14 @@ export const LandingPage: React.FC = () => {
                   <img
                     src={testimonials[currentTestimonial].avatar}
                     alt={`${testimonials[currentTestimonial].name} profile picture`}
-                    className="w-16 h-16 rounded-full object-cover ring-2 ring-accent-primary/20"
+                    className="w-16 h-16 rounded-full object-cover ring-2"
+                    style={{ ringColor: '#FF6A1A' }}
                   />
                   <div className="text-left">
-                    <p className="font-semibold text-text-primary">
+                    <p className="font-semibold text-white">
                       {testimonials[currentTestimonial].name}
                     </p>
-                    <p className="text-text-tertiary">
+                    <p className="text-gray-400">
                       {testimonials[currentTestimonial].role}
                     </p>
                   </div>
@@ -509,9 +589,13 @@ export const LandingPage: React.FC = () => {
 
             {/* Navigation */}
             <div className="flex justify-center space-x-4 mt-8">
-              <Button variant="tertiary" size="sm" onClick={prevTestimonial}>
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
+              <button
+                onClick={prevTestimonial}
+                className="p-3 rounded-full border border-gray-600 text-white hover:bg-gray-800 transition-colors"
+                aria-label="Previous testimonial"
+              >
+                <ArrowRight className="h-4 w-4 rotate-180" />
+              </button>
               
               <div className="flex space-x-2 items-center">
                 {testimonials.map((_, index) => (
@@ -519,22 +603,97 @@ export const LandingPage: React.FC = () => {
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
                     className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentTestimonial ? 'bg-accent-primary' : 'bg-border-default'
+                      index === currentTestimonial ? 'bg-white' : 'bg-gray-600'
                     }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
                   />
                 ))}
               </div>
               
-              <Button variant="tertiary" size="sm" onClick={nextTestimonial}>
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+              <button
+                onClick={nextTestimonial}
+                className="p-3 rounded-full border border-gray-600 text-white hover:bg-gray-800 transition-colors"
+                aria-label="Next testimonial"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8"
+               style={{ backgroundColor: 'white' }}>
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center space-y-4 mb-16"
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold"
+                style={{ color: '#0A1A2F' }}>
+              Common Questions
+            </h2>
+            <p className="text-xl"
+               style={{ color: '#4A5568' }}>
+              Everything you need to know about SenseEye
+            </p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={faq.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card style={{ backgroundColor: '#FAFAF9', borderColor: '#E5E5E5' }}>
+                  <button
+                    onClick={() => toggleFAQ(faq.id)}
+                    className="w-full p-6 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    style={{ focusRingColor: '#FF6A1A' }}
+                    aria-expanded={openFAQ === faq.id}
+                  >
+                    <h3 className="text-lg font-semibold"
+                        style={{ color: '#0A1A2F' }}>
+                      {faq.question}
+                    </h3>
+                    {openFAQ === faq.id ? (
+                      <ChevronUp className="w-5 h-5 flex-shrink-0"
+                                 style={{ color: '#FF6A1A' }} />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 flex-shrink-0"
+                                   style={{ color: '#FF6A1A' }} />
+                    )}
+                  </button>
+                  
+                  {openFAQ === faq.id && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="px-6 pb-6"
+                    >
+                      <p style={{ color: '#4A5568' }}>
+                        {faq.answer}
+                      </p>
+                    </motion.div>
+                  )}
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-accent-primary/10">
+      <section className="py-20 px-4 sm:px-6 lg:px-8"
+               style={{ backgroundColor: 'rgba(255, 106, 26, 0.05)' }}>
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -543,20 +702,30 @@ export const LandingPage: React.FC = () => {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-text-primary">
-              Ready to Enhance Your Practice?
+            <h2 className="text-3xl sm:text-4xl font-bold"
+                style={{ color: '#0A1A2F' }}>
+              Ready to Transform Your Vision Care?
             </h2>
-            <p className="text-xl text-text-secondary">
-              Join ophthalmic professionals who trust VisionTest for accurate, 
-              efficient visual field testing and patient management.
+            <p className="text-xl"
+               style={{ color: '#4A5568' }}>
+              Join thousands who trust SenseEye for accurate, convenient visual field testing.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" onClick={handleGetStarted}>
+              <Button 
+                size="lg" 
+                onClick={handleGetStarted}
+                className="text-white font-medium text-lg px-8 py-4"
+                style={{ backgroundColor: '#FF6A1A' }}
+              >
                 <Shield className="h-5 w-5 mr-2" />
-                Start Free Trial
+                Start Free Test
               </Button>
-              <Button variant="secondary" size="lg" onClick={handleWatchDemo}>
-                <Calendar className="h-5 w-5 mr-2" />
+              <Button 
+                variant="tertiary" 
+                size="lg"
+                className="font-medium text-lg px-8 py-4 border-2"
+                style={{ color: '#0A1A2F', borderColor: '#0A1A2F' }}
+              >
                 Schedule Demo
               </Button>
             </div>
@@ -565,83 +734,91 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-background-secondary py-12 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
+      <footer className="py-12 px-4 sm:px-6 lg:px-8"
+              style={{ backgroundColor: '#0A1A2F' }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Logo and Description */}
             <div className="md:col-span-2 space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
-                  <Eye className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                     style={{ backgroundColor: '#FF6A1A' }}>
+                  <Eye className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-text-primary">VisionTest</h3>
+                <h3 className="text-xl font-bold text-white">SenseEye</h3>
               </div>
-              <p className="text-text-secondary max-w-md">
-                Professional visual field testing platform designed for modern 
-                ophthalmology practices and ophthalmic technicians.
+              <p className="text-gray-300 max-w-md">
+                Advanced visual field testing platform that brings clinical-grade accuracy 
+                to any device, anywhere.
               </p>
               <div className="flex space-x-4">
-                <button className="p-2 rounded-lg hover:bg-background-tertiary transition-colors">
-                  <Twitter className="h-5 w-5 text-text-tertiary hover:text-text-primary" />
+                <button className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                        aria-label="Twitter">
+                  <Twitter className="h-5 w-5 text-gray-400 hover:text-white" />
                 </button>
-                <button className="p-2 rounded-lg hover:bg-background-tertiary transition-colors">
-                  <Linkedin className="h-5 w-5 text-text-tertiary hover:text-text-primary" />
+                <button className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                        aria-label="LinkedIn">
+                  <Linkedin className="h-5 w-5 text-gray-400 hover:text-white" />
                 </button>
-                <button className="p-2 rounded-lg hover:bg-background-tertiary transition-colors">
-                  <Facebook className="h-5 w-5 text-text-tertiary hover:text-text-primary" />
+                <button className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+                        aria-label="Facebook">
+                  <Facebook className="h-5 w-5 text-gray-400 hover:text-white" />
                 </button>
               </div>
             </div>
 
             {/* Quick Links */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-text-primary">Platform</h4>
+              <h4 className="font-semibold text-white">Quick Links</h4>
               <ul className="space-y-2">
-                <li>
-                  <button onClick={() => scrollToSection("#features")} className="text-text-secondary hover:text-text-primary transition-colors">
-                    Features
-                  </button>
-                </li>
-                <li>
-                  <button onClick={handleWatchDemo} className="text-text-secondary hover:text-text-primary transition-colors">
-                    Demo
-                  </button>
-                </li>
-                <li>
-                  <button onClick={handleGetStarted} className="text-text-secondary hover:text-text-primary transition-colors">
-                    Sign In
-                  </button>
-                </li>
-                <li>
-                  <a href="#" className="text-text-secondary hover:text-text-primary transition-colors">
-                    Documentation
-                  </a>
-                </li>
+                {navigationLinks.map(link => (
+                  <li key={link.label}>
+                    <button 
+                      onClick={() => scrollToSection(link.href)}
+                      className="text-gray-300 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </button>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Contact */}
+            {/* Legal & Contact */}
             <div className="space-y-4">
-              <h4 className="font-semibold text-text-primary">Support</h4>
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 text-text-tertiary" />
-                  <a href="mailto:support@visiontest.com" className="text-text-secondary hover:text-text-primary transition-colors">
-                    support@visiontest.com
+              <h4 className="font-semibold text-white">Legal</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                    Terms of Service
                   </a>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Lock className="h-4 w-4 text-text-tertiary" />
-                  <span className="text-text-secondary text-sm">HIPAA Compliant</span>
-                </div>
-              </div>
+                </li>
+                <li>
+                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <div className="flex items-center space-x-2">
+                    <Mail className="h-4 w-4 text-gray-400" />
+                    <a href="mailto:contact@senseeye.com" 
+                       className="text-gray-300 hover:text-white transition-colors">
+                      contact@senseeye.com
+                    </a>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
 
-          <div className="border-t border-border-subtle mt-8 pt-8 text-center">
-            <p className="text-text-tertiary">
-              © 2024 VisionTest Clinical Platform. All rights reserved.
+          <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
+            <p className="text-gray-400">
+              © 2024 SenseEye. All rights reserved.
             </p>
+            <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+              <span className="text-gray-400 text-sm">🔧 Built with</span>
+              <span className="font-medium" style={{ color: '#FF6A1A' }}>Bolt.new</span>
+            </div>
           </div>
         </div>
       </footer>
