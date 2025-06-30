@@ -4,7 +4,6 @@ import { Layout } from './components/layout/Layout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { SignIn } from './components/auth/SignIn';
 import { SignUp } from './components/auth/SignUp';
-import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { TestSetup } from './pages/TestSetup';
 import { VisualFieldTest } from './pages/VisualFieldTest';
@@ -16,12 +15,11 @@ import { useDatabase } from './hooks/useDatabase';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { loading: authLoading, user } = useAuth();
+  const { loading: authLoading } = useAuth();
   
   // Initialize database connection and load data only when authenticated
   useDatabase();
 
-  // Show loading screen while auth is being determined
   if (authLoading) {
     return (
       <div className="min-h-screen bg-background-primary flex items-center justify-center">
@@ -36,60 +34,50 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page - public */}
-        <Route path="/" element={<Landing />} />
-        
-        {/* Public auth routes */}
+        {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         
         {/* Test route - accessible without authentication for debugging */}
         <Route path="/test-supabase" element={<SupabaseTestPage />} />
         
-        {/* Protected app routes */}
-        <Route path="/app" element={
+        {/* Protected routes */}
+        <Route path="/" element={
           <ProtectedRoute>
             <Layout>
               <Dashboard />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/app/dashboard" element={
-          <ProtectedRoute>
-            <Layout>
-              <Dashboard />
-            </Layout>
-          </ProtectedRoute>
-        } />
-        <Route path="/app/setup" element={
+        <Route path="/setup" element={
           <ProtectedRoute>
             <Layout>
               <TestSetup />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/app/test" element={
+        <Route path="/test" element={
           <ProtectedRoute>
             <Layout>
               <VisualFieldTest />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/app/results" element={
+        <Route path="/results" element={
           <ProtectedRoute>
             <Layout>
               <Results />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/app/patients" element={
+        <Route path="/patients" element={
           <ProtectedRoute>
             <Layout>
               <Patients />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/app/settings" element={
+        <Route path="/settings" element={
           <ProtectedRoute>
             <Layout>
               <Settings />
@@ -97,7 +85,7 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to landing page */}
+        {/* Redirect any unknown routes to dashboard */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

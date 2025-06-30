@@ -69,7 +69,7 @@ export const TestSetup: React.FC = () => {
     if (selectedPatientData) {
       setCurrentPatient(selectedPatientData);
       setCurrentTest(testConfig);
-      navigate('/app/test');
+      navigate('/test');
     }
   };
 
