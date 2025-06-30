@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Search,
-  User,
-  Eye,
-  Clock,
-  Settings,
   Play,
-  ChevronDown,
-  Calendar,
-  Phone,
-  Mail
+  Pause,
+  Square,
+  Volume2,
+  VolumeX,
+  Eye,
+  Target,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  Bell,
+  Settings,
+  User,
+  Activity
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
@@ -30,63 +34,104 @@ const item = {
   show: { opacity: 1, y: 0 }
 };
 
-// Mock patient data for demo
-const mockPatients = [
-  {
-    id: '1',
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    dateOfBirth: '1965-03-15',
-    email: 'sarah.johnson@email.com',
-    phone: '(555) 123-4567',
-    avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-    lastVisit: '2024-01-15',
-    totalTests: 8,
-    medicalHistory: ['Glaucoma', 'Hypertension']
-  },
-  {
-    id: '2',
-    firstName: 'Michael',
-    lastName: 'Chen',
-    dateOfBirth: '1972-08-22',
-    email: 'michael.chen@email.com',
-    phone: '(555) 234-5678',
-    avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-    lastVisit: '2024-01-20',
-    totalTests: 12,
-    medicalHistory: ['Diabetic Retinopathy', 'Type 2 Diabetes']
-  },
-  {
-    id: '3',
-    firstName: 'Emma',
-    lastName: 'Rodriguez',
-    dateOfBirth: '1958-11-03',
-    email: 'emma.rodriguez@email.com',
-    phone: '(555) 345-6789',
-    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2',
-    lastVisit: '2024-01-10',
-    totalTests: 15,
-    medicalHistory: ['Age-related Macular Degeneration']
-  }
-];
-
 export const ContentSection: React.FC = () => {
-  const [selectedPatient, setSelectedPatient] = useState(mockPatients[0]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showPatientDropdown, setShowPatientDropdown] = useState(false);
-  const [testConfig, setTestConfig] = useState({
-    testType: '24-2',
-    strategy: 'SITA Standard',
-    eye: 'OD',
-    duration: 300,
-    stimulusSize: 3,
-    stimulusIntensity: 10,
-    fixationMonitoring: true
+  const [isTestInProgress, setIsTestInProgress] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [testProgress, setTestProgress] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(300);
+  const [currentQuadrant, setCurrentQuadrant] = useState('Superior Nasal');
+  const [reliability, setReliability] = useState({
+    falsePositives: 2,
+    falseNegatives: 1,
+    fixationLosses: 0,
   });
 
-  const filteredPatients = mockPatients.filter(patient =>
-    `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+  // Test grid for visualization
+  const [gridState, setGridState] = useState(() => 
+    Array(8).fill(null).map(() => 
+      Array(8).fill(null).map(() => ({
+        tested: Math.random() > 0.3,
+        response: Math.random() > 0.2,
+        active: false,
+      }))
+    )
   );
+  const [activePoint, setActivePoint] = useState({ row: -1, col: -1 });
+
+  // Demo timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isTestInProgress && !isPaused) {
+      interval = setInterval(() => {
+        setTimeRemaining(prev => {
+          const newTime = Math.max(0, prev - 1);
+          const progress = Math.round(((300 - newTime) / 300) * 100);
+          setTestProgress(Math.min(progress, 100));
+          
+          if (newTime <= 0) {
+            setIsTestInProgress(false);
+            return 0;
+          }
+          
+          return newTime;
+        });
+        
+        // Simulate test points
+        if (Math.random() > 0.7) {
+          const row = Math.floor(Math.random() * 8);
+          const col = Math.floor(Math.random() * 8);
+          setActivePoint({ row, col });
+          
+          setTimeout(() => {
+            setActivePoint({ row: -1, col: -1 });
+            setGridState(prev => 
+              prev.map((r, rIndex) => 
+                r.map((c, cIndex) => 
+                  rIndex === row && cIndex === col 
+                    ? { ...c, tested: true, response: Math.random() > 0.15 }
+                    : c
+                )
+              )
+            );
+          }, 1000);
+        }
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [isTestInProgress, isPaused]);
+
+  const handleStartTest = () => {
+    setIsTestInProgress(true);
+    setIsPaused(false);
+    setTimeRemaining(300);
+    setTestProgress(0);
+  };
+
+  const handlePauseTest = () => {
+    setIsPaused(!isPaused);
+  };
+
+  const handleStopTest = () => {
+    setIsTestInProgress(false);
+    setTestProgress(0);
+    setTimeRemaining(300);
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const mockPatient = {
+    firstName: 'Sarah',
+    lastName: 'Johnson',
+    testType: '24-2',
+    eye: 'OD'
+  };
 
   return (
     <section className="py-16 md:py-32 bg-background-primary">
@@ -102,14 +147,14 @@ export const ContentSection: React.FC = () => {
             variants={item}
             className="text-4xl lg:text-5xl font-bold text-text-primary mb-4"
           >
-            Streamlined Test Setup Workflow
+            Live Visual Field Testing Interface
           </motion.h2>
           <motion.p 
             variants={item}
             className="text-xl text-text-secondary max-w-3xl mx-auto"
           >
-            Experience our intuitive test configuration interface that makes visual field testing 
-            simple and efficient for your clinical workflow.
+            Experience our real-time testing interface with live monitoring, 
+            reliability tracking, and instant feedback for clinical-grade results.
           </motion.p>
         </motion.div>
 
@@ -118,311 +163,280 @@ export const ContentSection: React.FC = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          className="space-y-6"
         >
-          {/* Patient Selection */}
-          <motion.div variants={item} className="lg:col-span-1">
-            <Card>
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-text-primary mb-2">Patient Selection</h3>
-                <p className="text-text-tertiary text-sm">Choose patient for testing</p>
+          {/* Header */}
+          <motion.div variants={item}>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-text-primary mb-2">Visual Field Test Demo</h3>
+                <p className="text-text-secondary">
+                  {mockPatient.firstName} {mockPatient.lastName} - {mockPatient.testType} {mockPatient.eye}
+                </p>
+                <div className="flex items-center space-x-2 mt-2">
+                  <div className="flex items-center space-x-2 text-accent-primary">
+                    <Eye className="w-4 h-4" />
+                    <span className="text-sm font-medium">Interactive Demo Mode</span>
+                  </div>
+                </div>
               </div>
-
-              {/* Search */}
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-                <input
-                  type="text"
-                  placeholder="Search patients..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onFocus={() => setShowPatientDropdown(true)}
-                  className="w-full pl-10 pr-4 py-3 bg-background-tertiary border border-border-default rounded-input text-text-primary placeholder-text-tertiary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-                />
-              </div>
-
-              {/* Patient Dropdown */}
-              {showPatientDropdown && (
-                <div className="bg-background-tertiary border border-border-default rounded-input max-h-60 overflow-y-auto mb-4">
-                  {filteredPatients.map((patient) => (
-                    <button
-                      key={patient.id}
-                      onClick={() => {
-                        setSelectedPatient(patient);
-                        setSearchTerm(`${patient.firstName} ${patient.lastName}`);
-                        setShowPatientDropdown(false);
-                      }}
-                      className="w-full flex items-center space-x-3 p-3 hover:bg-background-secondary transition-colors text-left"
+              <div className="flex space-x-3 mt-4 lg:mt-0">
+                {!isTestInProgress ? (
+                  <Button icon={<Play className="w-4 h-4" />} onClick={handleStartTest}>
+                    Start Demo
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="secondary"
+                      icon={isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                      onClick={handlePauseTest}
                     >
-                      <img
-                        src={patient.avatar}
-                        alt={`${patient.firstName} ${patient.lastName}`}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                      <div>
-                        <p className="font-medium text-text-primary">
-                          {patient.firstName} {patient.lastName}
-                        </p>
-                        <p className="text-sm text-text-tertiary">
-                          Last visit: {new Date(patient.lastVisit).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Selected Patient */}
-              {selectedPatient && (
-                <div className="bg-background-tertiary rounded-input p-4">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <img
-                      src={selectedPatient.avatar}
-                      alt={`${selectedPatient.firstName} ${selectedPatient.lastName}`}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="font-semibold text-text-primary">
-                        {selectedPatient.firstName} {selectedPatient.lastName}
-                      </p>
-                      <p className="text-sm text-text-tertiary">
-                        DOB: {new Date(selectedPatient.dateOfBirth).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-sm text-text-secondary space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <Mail className="w-3 h-3" />
-                      <span>{selectedPatient.email}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Phone className="w-3 h-3" />
-                      <span>{selectedPatient.phone}</span>
-                    </div>
-                    <p>Previous tests: {selectedPatient.totalTests}</p>
-                    <p>Conditions: {selectedPatient.medicalHistory.join(', ')}</p>
-                  </div>
-                </div>
-              )}
-            </Card>
+                      {isPaused ? 'Resume' : 'Pause'}
+                    </Button>
+                    <Button 
+                      variant="tertiary" 
+                      icon={<Square className="w-4 h-4" />} 
+                      onClick={handleStopTest}
+                    >
+                      Stop Demo
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
           </motion.div>
 
-          {/* Test Configuration */}
-          <motion.div variants={item} className="lg:col-span-2">
-            <Card>
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-text-primary mb-2">Test Configuration</h3>
-                <p className="text-text-tertiary text-sm">Configure test parameters and settings</p>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Test Interface */}
+            <motion.div variants={item} className="lg:col-span-2">
+              <Card>
+                <div className="text-center mb-6">
+                  <h4 className="text-lg font-semibold text-text-primary mb-2">Test Interface</h4>
+                  <p className="text-text-tertiary text-sm">
+                    {isTestInProgress 
+                      ? isPaused 
+                        ? `Demo paused - ${mockPatient.eye} - Focus on center when resumed`
+                        : `Testing ${mockPatient.eye} - Focus on the center`
+                      : `Ready to begin ${mockPatient.eye} testing demo`
+                    }
+                  </p>
+                </div>
 
-              <div className="space-y-6">
-                {/* Basic Settings */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
-                      Test Type
-                    </label>
-                    <select
-                      value={testConfig.testType}
-                      onChange={(e) => setTestConfig(prev => ({ ...prev, testType: e.target.value }))}
-                      className="w-full px-3 py-2 bg-background-tertiary border border-border-default rounded-input text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-                    >
-                      <option value="24-2">24-2 Swedish Interactive Threshold</option>
-                      <option value="30-2">30-2 Swedish Interactive Threshold</option>
-                      <option value="10-2">10-2 Swedish Interactive Threshold</option>
-                      <option value="Custom">Custom</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
-                      Strategy
-                    </label>
-                    <select
-                      value={testConfig.strategy}
-                      onChange={(e) => setTestConfig(prev => ({ ...prev, strategy: e.target.value }))}
-                      className="w-full px-3 py-2 bg-background-tertiary border border-border-default rounded-input text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-                    >
-                      <option value="SITA Standard">SITA Standard</option>
-                      <option value="SITA Fast">SITA Fast</option>
-                      <option value="Full Threshold">Full Threshold</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
-                      Eye Selection
-                    </label>
-                    <div className="flex space-x-2">
-                      {['OD', 'OS', 'OU'].map((eye) => (
-                        <button
-                          key={eye}
-                          onClick={() => setTestConfig(prev => ({ ...prev, eye }))}
-                          className={`flex-1 px-4 py-2 rounded-button border transition-colors ${
-                            testConfig.eye === eye
-                              ? 'bg-accent-primary text-white border-accent-primary'
-                              : 'bg-background-tertiary text-text-primary border-border-default hover:border-border-strong'
-                          }`}
-                        >
-                          {eye}
-                        </button>
-                      ))}
+                {/* Visual Field Grid */}
+                <div className="bg-black rounded-lg p-8 mb-6">
+                  <div className="relative w-full max-w-md mx-auto aspect-square">
+                    {/* Central fixation point */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full z-10"></div>
+                    
+                    {/* Test grid */}
+                    <div className="grid grid-cols-8 gap-1 w-full h-full">
+                      {gridState.map((row, rowIndex) =>
+                        row.map((point, colIndex) => (
+                          <div
+                            key={`${rowIndex}-${colIndex}`}
+                            className={`rounded-full transition-all duration-300 ${
+                              activePoint.row === rowIndex && activePoint.col === colIndex && isTestInProgress
+                                ? 'bg-white scale-150'
+                                : point.tested
+                                ? point.response
+                                  ? 'bg-green-500 opacity-60'
+                                  : 'bg-red-500 opacity-60'
+                                : 'bg-gray-700 opacity-30'
+                            }`}
+                            style={{
+                              width: '8px',
+                              height: '8px',
+                            }}
+                          />
+                        ))
+                      )}
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-text-primary mb-2">
-                      Duration (seconds)
-                    </label>
-                    <input
-                      type="number"
-                      value={testConfig.duration}
-                      onChange={(e) => setTestConfig(prev => ({ ...prev, duration: parseInt(e.target.value) }))}
-                      className="w-full px-3 py-2 bg-background-tertiary border border-border-default rounded-input text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-                    />
                   </div>
                 </div>
 
-                {/* Advanced Parameters */}
-                <div className="border-t border-border-subtle pt-6">
-                  <h4 className="text-lg font-medium text-text-primary mb-4">Advanced Parameters</h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-text-primary mb-2">
-                        Stimulus Size
-                      </label>
-                      <select
-                        value={testConfig.stimulusSize}
-                        onChange={(e) => setTestConfig(prev => ({ ...prev, stimulusSize: parseInt(e.target.value) }))}
-                        className="w-full px-3 py-2 bg-background-tertiary border border-border-default rounded-input text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent"
-                      >
-                        <option value={1}>Size I (0.1°)</option>
-                        <option value={2}>Size II (0.2°)</option>
-                        <option value={3}>Size III (0.43°)</option>
-                        <option value={4}>Size IV (0.86°)</option>
-                        <option value={5}>Size V (1.72°)</option>
-                      </select>
-                    </div>
+                {/* Patient Instructions */}
+                <div className="bg-background-tertiary rounded-lg p-4">
+                  <h5 className="font-medium text-text-primary mb-2">Instructions for Patient:</h5>
+                  <ul className="text-sm text-text-secondary space-y-1">
+                    <li>• Look at the red dot in the center at all times</li>
+                    <li>• Press the button when you see a flash of light</li>
+                    <li>• Don't move your head or eyes</li>
+                    <li>• Blink normally between flashes</li>
+                    {isTestInProgress && <li className="text-accent-primary">• Demo is currently running</li>}
+                  </ul>
+                </div>
+              </Card>
+            </motion.div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-text-primary mb-2">
-                        Stimulus Intensity: {testConfig.stimulusIntensity} dB
-                      </label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="40"
-                        value={testConfig.stimulusIntensity}
-                        onChange={(e) => setTestConfig(prev => ({ ...prev, stimulusIntensity: parseInt(e.target.value) }))}
-                        className="w-full h-2 bg-background-tertiary rounded-lg appearance-none cursor-pointer slider"
-                      />
-                      <div className="flex justify-between text-xs text-text-tertiary mt-1">
-                        <span>0 dB</span>
-                        <span>40 dB</span>
-                      </div>
-                    </div>
+            {/* Control Panel */}
+            <motion.div variants={item} className="space-y-6">
+              {/* Progress */}
+              <Card>
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h5 className="font-medium text-text-primary">Test Progress</h5>
+                    <span className="text-sm text-text-tertiary">{testProgress}%</span>
                   </div>
-
-                  <div className="mt-6">
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={testConfig.fixationMonitoring}
-                        onChange={(e) => setTestConfig(prev => ({ ...prev, fixationMonitoring: e.target.checked }))}
-                        className="w-4 h-4 text-accent-primary border-border-default rounded focus:ring-accent-primary"
-                      />
-                      <span className="text-text-primary font-medium">Enable Fixation Monitoring</span>
-                    </label>
-                    <p className="text-sm text-text-tertiary mt-1 ml-7">
-                      Monitor patient's fixation during the test
+                  <div className="w-full bg-background-tertiary rounded-full h-2">
+                    <motion.div
+                      className="h-2 rounded-full bg-accent-primary"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${testProgress}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-text-tertiary">Current Quadrant</p>
+                    <p className="text-text-primary font-medium">{currentQuadrant}</p>
+                  </div>
+                  <div>
+                    <p className="text-text-tertiary">Time Remaining</p>
+                    <p className={`font-medium flex items-center ${
+                      timeRemaining <= 60 ? 'text-warning' : 'text-text-primary'
+                    }`}>
+                      <Clock className="w-3 h-3 mr-1" />
+                      {formatTime(timeRemaining)}
                     </p>
                   </div>
                 </div>
-              </div>
-            </Card>
-          </motion.div>
-        </motion.div>
+              </Card>
 
-        {/* Test Preview */}
-        <motion.div variants={item} className="mt-8">
-          <Card>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-text-primary">Test Preview</h3>
-              <div className="flex items-center space-x-2 text-text-tertiary">
-                <Clock className="w-4 h-4" />
-                <span className="text-sm">Estimated duration: {Math.ceil(testConfig.duration / 60)} minutes</span>
-              </div>
-            </div>
-            
-            <div className="bg-background-tertiary rounded-input p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
-                <div>
-                  <p className="text-text-tertiary">Patient</p>
-                  <p className="text-text-primary font-medium">
-                    {selectedPatient?.firstName} {selectedPatient?.lastName}
-                  </p>
+              {/* Reliability */}
+              <Card>
+                <h5 className="font-medium text-text-primary mb-4">Reliability Indices</h5>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">False Positives</span>
+                    <span className={`font-medium ${reliability.falsePositives > 3 ? 'text-warning' : 'text-success'}`}>
+                      {reliability.falsePositives}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">False Negatives</span>
+                    <span className={`font-medium ${reliability.falseNegatives > 3 ? 'text-warning' : 'text-success'}`}>
+                      {reliability.falseNegatives}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">Fixation Losses</span>
+                    <span className={`font-medium ${reliability.fixationLosses > 2 ? 'text-warning' : 'text-success'}`}>
+                      {reliability.fixationLosses}%
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-text-tertiary">Test Type</p>
-                  <p className="text-text-primary font-medium">{testConfig.testType}</p>
+                
+                <div className="mt-4 p-3 bg-success/20 rounded-lg flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-success" />
+                  <span className="text-sm text-success font-medium">Reliable Test</span>
                 </div>
-                <div>
-                  <p className="text-text-tertiary">Strategy</p>
-                  <p className="text-text-primary font-medium">{testConfig.strategy}</p>
+              </Card>
+
+              {/* Test Parameters */}
+              <Card>
+                <h5 className="font-medium text-text-primary mb-4">Test Parameters</h5>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">Test Type</span>
+                    <span className="text-text-primary font-medium">24-2</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">Strategy</span>
+                    <span className="text-text-primary font-medium">SITA Standard</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">Eye</span>
+                    <span className="text-text-primary font-medium">OD</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">Stimulus Size</span>
+                    <span className="text-text-primary font-medium">Size III</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-text-secondary">Fixation Monitor</span>
+                    <span className="text-text-primary font-medium">On</span>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-text-tertiary">Eye</p>
-                  <p className="text-text-primary font-medium">{testConfig.eye}</p>
+              </Card>
+
+              {/* Controls */}
+              <Card>
+                <h5 className="font-medium text-text-primary mb-4">Test Controls</h5>
+                <div className="space-y-3">
+                  <button
+                    onClick={() => setAudioEnabled(!audioEnabled)}
+                    className="w-full flex items-center justify-between p-3 bg-background-tertiary rounded-button hover:bg-border-subtle transition-colors"
+                  >
+                    <span className="text-text-primary">Audio Feedback</span>
+                    {audioEnabled ? (
+                      <Volume2 className="w-4 h-4 text-accent-primary" />
+                    ) : (
+                      <VolumeX className="w-4 h-4 text-text-tertiary" />
+                    )}
+                  </button>
+                  
+                  <button className="w-full flex items-center justify-center space-x-2 p-3 bg-warning/20 text-warning rounded-button hover:bg-warning/30 transition-colors">
+                    <AlertTriangle className="w-4 h-4" />
+                    <span>Emergency Stop</span>
+                  </button>
                 </div>
-              </div>
-              
-              <div className="flex justify-center">
+              </Card>
+
+              {/* Patient Response */}
+              <Card>
+                <h5 className="font-medium text-text-primary mb-4">Patient Response</h5>
                 <Button 
-                  icon={<Play className="w-4 h-4" />}
-                  size="lg"
-                  className="px-8"
+                  size="lg" 
+                  className="w-full h-20 text-xl"
+                  disabled={!isTestInProgress || isPaused}
                 >
-                  Start Test Demo
+                  <Target className="w-8 h-8 mr-3" />
+                  Response Button
                 </Button>
+                <p className="text-xs text-text-tertiary mt-2 text-center">
+                  Patient presses when seeing light stimulus
+                </p>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Feature Highlights */}
+          <motion.div 
+            variants={container}
+            className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            <motion.div variants={item} className="text-center">
+              <div className="w-12 h-12 bg-accent-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Activity className="w-6 h-6 text-accent-primary" />
               </div>
-            </div>
-          </Card>
-        </motion.div>
+              <h4 className="text-lg font-semibold text-text-primary mb-2">Real-time Monitoring</h4>
+              <p className="text-text-secondary text-sm">
+                Live test progress tracking with instant reliability feedback and quality control metrics.
+              </p>
+            </motion.div>
 
-        {/* Feature Highlights */}
-        <motion.div 
-          variants={container}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
-        >
-          <motion.div variants={item} className="text-center">
-            <div className="w-12 h-12 bg-accent-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <User className="w-6 h-6 text-accent-primary" />
-            </div>
-            <h3 className="text-lg font-semibold text-text-primary mb-2">Patient Management</h3>
-            <p className="text-text-secondary text-sm">
-              Comprehensive patient database with medical history, test records, and scheduling integration.
-            </p>
-          </motion.div>
+            <motion.div variants={item} className="text-center">
+              <div className="w-12 h-12 bg-accent-secondary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Eye className="w-6 h-6 text-accent-secondary" />
+              </div>
+              <h4 className="text-lg font-semibold text-text-primary mb-2">Precise Calibration</h4>
+              <p className="text-text-secondary text-sm">
+                Advanced eye tracking and fixation monitoring for accurate stimulus presentation and response detection.
+              </p>
+            </motion.div>
 
-          <motion.div variants={item} className="text-center">
-            <div className="w-12 h-12 bg-accent-secondary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Settings className="w-6 h-6 text-accent-secondary" />
-            </div>
-            <h3 className="text-lg font-semibold text-text-primary mb-2">Advanced Configuration</h3>
-            <p className="text-text-secondary text-sm">
-              Customizable test parameters with clinical-grade precision for specialized testing requirements.
-            </p>
-          </motion.div>
-
-          <motion.div variants={item} className="text-center">
-            <div className="w-12 h-12 bg-success/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <Eye className="w-6 h-6 text-success" />
-            </div>
-            <h3 className="text-lg font-semibold text-text-primary mb-2">Real-time Testing</h3>
-            <p className="text-text-secondary text-sm">
-              Live test monitoring with instant feedback and quality control for reliable results.
-            </p>
+            <motion.div variants={item} className="text-center">
+              <div className="w-12 h-12 bg-success/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-6 h-6 text-success" />
+              </div>
+              <h4 className="text-lg font-semibold text-text-primary mb-2">Clinical Validation</h4>
+              <p className="text-text-secondary text-sm">
+                Comprehensive reliability analysis and automated quality assessment for clinical-grade results.
+              </p>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
