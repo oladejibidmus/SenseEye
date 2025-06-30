@@ -4,12 +4,11 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
-import { User, Eye, Star, CheckCircle, Play, Mail, Lock, Github, Facebook, Twitter, Linkedin, ArrowRight, Zap, Shield, Clock, Award, X, ChevronDown } from "lucide-react";
+import { User, Eye, Star, CheckCircle, Play, Mail, Lock, Github, Facebook, Twitter, Linkedin, ArrowRight, Zap, Shield, Clock, Award, X, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import Header from "./Header";
 import SignUpModal from "./SignUpModal";
 import CapitalDemo from "./CapitalDemo";
@@ -89,6 +88,70 @@ const howItWorksSteps = [
     icon: CheckCircle
   }
 ];
+
+// Simple Carousel Component
+const SimpleCarousel = ({ children }: { children: React.ReactNode[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const totalItems = React.Children.count(children);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
+  };
+
+  return (
+    <div className="relative max-w-6xl mx-auto">
+      <div className="overflow-hidden">
+        <div 
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {React.Children.map(children, (child, index) => (
+            <div key={index} className="w-full flex-shrink-0 px-3">
+              {child}
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {totalItems > 1 && (
+        <>
+          <Button
+            onClick={goToPrevious}
+            variant="tertiary"
+            size="sm"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <Button
+            onClick={goToNext}
+            variant="tertiary"
+            size="sm"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </>
+      )}
+      
+      <div className="flex justify-center mt-6 space-x-2">
+        {Array.from({ length: totalItems }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-200 ${
+              index === currentIndex ? 'bg-[#FF6A1A]' : 'bg-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function SenseEyeLandingPage({ className }: SenseEyeLandingPageProps) {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -314,41 +377,36 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
               See what healthcare providers and patients are saying about SenseEye
             </p>
           </motion.div>
-          <Carousel className="max-w-6xl mx-auto">
-            <CarouselContent>
-              {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3">
-                  <motion.div whileHover={{ scale: 1.03, y: -10 }} className="p-6">
-                    <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                      <CardContent className="p-8 relative z-10">
-                        <div className="flex items-center mb-6">
-                          {[...Array(testimonial.rating)].map((_, i) => (
-                            <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
-                          ))}
-                        </div>
-                        <blockquote className="text-lg font-light text-gray-700 mb-8 leading-relaxed italic">
-                          "{testimonial.quote}"
-                        </blockquote>
-                        <div className="flex items-center">
-                          <Avatar className="h-16 w-16 mr-4 ring-2 ring-[#FF6A1A]/20">
-                            <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                            <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-light text-lg text-[#1A2233]">{testimonial.name}</p>
-                            <p className="text-base font-light text-gray-600">{testimonial.role}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="shadow-2xl" />
-            <CarouselNext className="shadow-2xl" />
-          </Carousel>
+          
+          <SimpleCarousel>
+            {testimonials.map((testimonial) => (
+              <motion.div key={testimonial.id} whileHover={{ scale: 1.03, y: -10 }} className="p-6">
+                <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <CardContent className="p-8 relative z-10">
+                    <div className="flex items-center mb-6">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <blockquote className="text-lg font-light text-gray-700 mb-8 leading-relaxed italic">
+                      "{testimonial.quote}"
+                    </blockquote>
+                    <div className="flex items-center">
+                      <Avatar className="h-16 w-16 mr-4 ring-2 ring-[#FF6A1A]/20">
+                        <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                        <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-light text-lg text-[#1A2233]">{testimonial.name}</p>
+                        <p className="text-base font-light text-gray-600">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </SimpleCarousel>
         </div>
       </section>
 
