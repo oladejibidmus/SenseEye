@@ -4,7 +4,6 @@ import { Layout } from './components/layout/Layout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { SignIn } from './components/auth/SignIn';
 import { SignUp } from './components/auth/SignUp';
-import { LandingPage } from './pages/LandingPage';
 import { Dashboard } from './pages/Dashboard';
 import { TestSetup } from './pages/TestSetup';
 import { VisualFieldTest } from './pages/VisualFieldTest';
@@ -16,7 +15,7 @@ import { useDatabase } from './hooks/useDatabase';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { loading: authLoading, user } = useAuth();
+  const { loading: authLoading } = useAuth();
   
   // Initialize database connection and load data only when authenticated
   useDatabase();
@@ -35,9 +34,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page - default route */}
-        <Route path="/" element={<LandingPage />} />
-        
         {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
@@ -45,8 +41,8 @@ function App() {
         {/* Test route - accessible without authentication for debugging */}
         <Route path="/test-supabase" element={<SupabaseTestPage />} />
         
-        {/* Protected routes - redirect to dashboard after authentication */}
-        <Route path="/dashboard" element={
+        {/* Protected routes */}
+        <Route path="/" element={
           <ProtectedRoute>
             <Layout>
               <Dashboard />
@@ -89,7 +85,7 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to landing page */}
+        {/* Redirect any unknown routes to dashboard */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
