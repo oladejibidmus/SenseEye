@@ -11,7 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Header from "@/components/ui/Header";
-import SignUpModal from "./SignUpModal";
 import CapitalDemo from "./CapitalDemo";
 import FAQSection from "./FAQSection";
 export interface SenseEyeLandingPageProps {
