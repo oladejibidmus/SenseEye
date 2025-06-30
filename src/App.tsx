@@ -4,6 +4,7 @@ import { Layout } from './components/layout/Layout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { SignIn } from './components/auth/SignIn';
 import { SignUp } from './components/auth/SignUp';
+import { LandingPage } from './pages/LandingPage';
 import { Dashboard } from './pages/Dashboard';
 import { TestSetup } from './pages/TestSetup';
 import { VisualFieldTest } from './pages/VisualFieldTest';
@@ -34,6 +35,9 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Landing page */}
+        <Route path="/landing" element={<LandingPage />} />
+        
         {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
@@ -85,8 +89,8 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to dashboard */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Redirect any unknown routes to landing page */}
+        <Route path="*" element={<Navigate to="/landing" replace />} />
       </Routes>
     </Router>
   );
