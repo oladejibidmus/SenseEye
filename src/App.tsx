@@ -4,6 +4,7 @@ import { Layout } from './components/layout/Layout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { SignIn } from './components/auth/SignIn';
 import { SignUp } from './components/auth/SignUp';
+import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { TestSetup } from './pages/TestSetup';
 import { VisualFieldTest } from './pages/VisualFieldTest';
@@ -34,6 +35,9 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Landing page - public */}
+        <Route path="/landing" element={<Landing />} />
+        
         {/* Public routes */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
