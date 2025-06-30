@@ -16,11 +16,12 @@ import { useDatabase } from './hooks/useDatabase';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { loading: authLoading } = useAuth();
+  const { loading: authLoading, user } = useAuth();
   
   // Initialize database connection and load data only when authenticated
   useDatabase();
 
+  // Show loading screen while auth is being determined
   if (authLoading) {
     return (
       <div className="min-h-screen bg-background-primary flex items-center justify-center">
@@ -47,6 +48,13 @@ function App() {
         
         {/* Protected app routes */}
         <Route path="/app" element={
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        <Route path="/app/dashboard" element={
           <ProtectedRoute>
             <Layout>
               <Dashboard />
