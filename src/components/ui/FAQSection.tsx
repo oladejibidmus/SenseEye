@@ -2,14 +2,12 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { clsx } from 'clsx';
+import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./Accordion";
-
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 export interface FAQSectionProps {
   className?: string;
 }
-
 const faqs = [{
   id: "faq-1",
   question: "How accurate is SenseEye compared to traditional visual field testing?",
@@ -35,11 +33,10 @@ const faqs = [{
   question: "Can patients use SenseEye at home for remote monitoring?",
   answer: "SenseEye offers both clinical and home-use versions. The home version allows for convenient patient monitoring between clinic visits, with results automatically shared with healthcare providers. This enables better disease management and early detection of visual field changes."
 }] as any[];
-
 export default function FAQSection({
   className
 }: FAQSectionProps) {
-  return <div className={clsx("max-w-7xl mx-auto px-4", className)}>
+  return <div className={cn("max-w-7xl mx-auto px-4", className)}>
       <motion.div initial={{
       opacity: 0,
       y: 20
