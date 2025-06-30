@@ -386,42 +386,6 @@ export const ContentSection: React.FC = () => {
               </Card>
             </motion.div>
           </div>
-
-          {/* Feature Highlights */}
-          <motion.div 
-            variants={container}
-            className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            <motion.div variants={item} className="text-center">
-              <div className="w-12 h-12 bg-accent-primary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-6 h-6 text-accent-primary" />
-              </div>
-              <h4 className="text-lg font-semibold text-text-primary mb-2">Comprehensive Reports</h4>
-              <p className="text-text-secondary text-sm">
-                Generate detailed PDF reports with visual field maps, indices, and clinical interpretations.
-              </p>
-            </motion.div>
-
-            <motion.div variants={item} className="text-center">
-              <div className="w-12 h-12 bg-accent-secondary/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-6 h-6 text-accent-secondary" />
-              </div>
-              <h4 className="text-lg font-semibold text-text-primary mb-2">Trend Analysis</h4>
-              <p className="text-text-secondary text-sm">
-                Track progression over time with automated trend analysis and statistical significance testing.
-              </p>
-            </motion.div>
-
-            <motion.div variants={item} className="text-center">
-              <div className="w-12 h-12 bg-success/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-6 h-6 text-success" />
-              </div>
-              <h4 className="text-lg font-semibold text-text-primary mb-2">Quality Assurance</h4>
-              <p className="text-text-secondary text-sm">
-                Advanced reliability metrics and quality control ensure accurate, clinically meaningful results.
-              </p>
-            </motion.div>
-          </motion.div>
         </motion.div>
       </div>
     </section>
