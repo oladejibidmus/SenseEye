@@ -1,721 +1,457 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import FAQSection from '../components/ui/FAQSection';
-import {
-  Eye,
-  Menu,
-  X,
-  ArrowRight,
-  Star,
-  ChevronDown,
-  ChevronUp,
-  Mail,
-  Twitter,
-  Linkedin,
-  Facebook,
-  CheckCircle,
-  Smartphone,
-  Brain,
-  Shield,
-  Clock,
-  Users,
-  Zap,
-  Globe,
-  Lock,
-  Play,
-  Monitor,
-  Headphones,
-  Award,
-} from 'lucide-react';
+"use client";
 
-interface Feature {
-  id: string;
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { User, Eye, Star, CheckCircle, Play, Mail, Lock, Github, Facebook, Twitter, Linkedin, ArrowRight, Zap, Shield, Clock, Award, X, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Header from "./Header";
+import SignUpModal from "./SignUpModal";
+import CapitalDemo from "./CapitalDemo";
+import FAQSection from "./FAQSection";
+export interface SenseEyeLandingPageProps {
+  className?: string;
 }
-
-interface Testimonial {
-  id: string;
-  name: string;
-  role: string;
-  avatar: string;
-  quote: string;
-  rating: number;
-}
-
-const features: Feature[] = [
-  {
-    id: "accessible-anywhere",
-    icon: Smartphone,
-    title: "Accessible Anywhere",
-    description: "Built for mobile and desktop. Test your visual field from any device, anywhere you have privacy and quiet."
-  },
-  {
-    id: "ai-precision",
-    icon: Brain,
-    title: "AI Precision",
-    description: "Powered by machine learning accuracy. Our algorithms provide clinically validated results you can trust."
-  },
-  {
-    id: "clinical-grade",
-    icon: Award,
-    title: "Clinical Grade",
-    description: "Validated by experts and peer-reviewed. Meets the same standards as traditional perimetry equipment."
-  },
-  {
-    id: "fast-private",
-    icon: Lock,
-    title: "Fast & Private",
-    description: "No data leaves your device. Complete privacy with results available in minutes, not days."
-  },
-  {
-    id: "wcag-compliant",
-    icon: Users,
-    title: "WCAG-Compliant",
-    description: "Inclusive for users with impairments. Designed with accessibility at its core for everyone."
-  },
-  {
-    id: "easy-onboarding",
-    icon: Zap,
-    title: "Easy Onboarding",
-    description: "No account required. Start testing immediately with our streamlined, intuitive interface."
-  }
-];
-
-const testimonials: Testimonial[] = [
-  {
-    id: "testimonial-1",
-    name: "Dr. Lisa Cheng",
-    role: "Ophthalmologist, Vision Medical Center",
-    avatar: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2",
-    quote: "SenseEye gave me back control of my vision care. I tested at home, and it felt like magic. The accuracy rivals our clinic equipment.",
-    rating: 5
-  },
-  {
-    id: "testimonial-2",
-    name: "Dr. Michael Rodriguez",
-    role: "Glaucoma Specialist, Eye Institute",
-    avatar: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2",
-    quote: "The convenience factor is incredible. My patients can monitor their visual fields between visits, giving us better data for treatment decisions.",
-    rating: 5
-  },
-  {
-    id: "testimonial-3",
-    name: "Sarah Martinez",
-    role: "Glaucoma Patient",
-    avatar: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=2",
-    quote: "As someone with glaucoma, regular monitoring is crucial. SenseEye lets me test monthly instead of waiting for appointments. It's been life-changing.",
-    rating: 5
-  }
-];
-
-const navigationLinks = [
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Features", href: "#features" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" }
-];
-
-export const LandingPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    setMobileMenuOpen(false);
-  };
-
+const testimonials = [{
+  id: 1,
+  name: "Dr. Sarah Chen",
+  role: "Ophthalmologist",
+  avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop&crop=face",
+  quote: "SenseEye has revolutionized how we conduct visual field tests. The accuracy and ease of use are remarkable.",
+  rating: 5
+}, {
+  id: 2,
+  name: "Michael Rodriguez",
+  role: "Patient",
+  avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+  quote: "Finally, a visual field test I can do from home. The VR experience is comfortable and the results are instant.",
+  rating: 5
+}, {
+  id: 3,
+  name: "Dr. James Wilson",
+  role: "Neurologist",
+  avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop&crop=face",
+  quote: "The precision and reliability of SenseEye's testing protocol exceeds traditional methods. Highly recommended.",
+  rating: 5
+}] as any[];
+const benefits = [{
+  icon: Zap,
+  title: "Lightning Fast Results",
+  description: "Get comprehensive visual field analysis in under 5 minutes with our advanced VR technology."
+}, {
+  icon: Shield,
+  title: "Clinical Grade Accuracy",
+  description: "FDA-approved testing protocols ensure results you can trust for medical decisions."
+}, {
+  icon: Clock,
+  title: "Convenient Testing",
+  description: "Test from home or clinic with our portable VR headset and intuitive interface."
+}, {
+  icon: Award,
+  title: "Expert Validated",
+  description: "Developed with leading ophthalmologists and validated across thousands of patients."
+}] as any[];
+const howItWorksSteps = [{
+  step: 1,
+  title: "Calibrate",
+  description: "Put on the VR headset and complete a quick 30-second calibration process.",
+  icon: Eye
+}, {
+  step: 2,
+  title: "Test",
+  description: "Follow the guided visual field test with interactive prompts and real-time feedback.",
+  icon: User
+}, {
+  step: 3,
+  title: "Get Results",
+  description: "Receive detailed analysis and recommendations instantly on your device.",
+  icon: CheckCircle
+}] as any[];
+export default function SenseEyeLandingPage({
+  className
+}: SenseEyeLandingPageProps) {
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [showCookieConsent, setShowCookieConsent] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const handleGetStarted = () => {
-    navigate('/signin');
+    setIsSignUpModalOpen(true);
   };
-
-  const handleSeeDemo = () => {
-    scrollToSection('#how-it-works');
+  const handleAcceptCookies = () => {
+    setShowCookieConsent(false);
   };
-
-  const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
   };
+  return <div className={cn("min-h-screen bg-gradient-to-br from-[#FAF7F2] via-white to-[#F8F5F0]", className)}>
+      {/* Subtle Pattern Overlay */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.4'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3Ccircle cx='53' cy='7' r='1'/%3E%3Ccircle cx='7' cy='53' r='1'/%3E%3Ccircle cx='53' cy='53' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+    }} />
 
-  const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
-      {/* Fixed Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b" 
-           style={{ backgroundColor: 'rgba(250, 250, 249, 0.95)', borderColor: '#E5E5E5' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" 
-                   style={{ backgroundColor: '#FF6A1A' }}>
-                <Eye className="w-6 h-6 text-white" />
-              </div>
-              <h1 className="text-xl font-bold" style={{ color: '#0A1A2F' }}>SenseEye</h1>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navigationLinks.map(link => (
-                <button
-                  key={link.label}
-                  onClick={() => scrollToSection(link.href)}
-                  className="font-medium transition-colors duration-200 hover:opacity-80"
-                  style={{ color: '#0A1A2F' }}
-                >
-                  {link.label}
-                </button>
-              ))}
-              <Button 
-                onClick={handleGetStarted}
-                className="text-white font-medium px-6 py-2"
-                style={{ backgroundColor: '#FF6A1A' }}
-              >
-                Get Started
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg transition-colors"
-              style={{ color: '#0A1A2F' }}
-              aria-label="Toggle mobile menu"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t"
-              style={{ borderColor: '#E5E5E5', backgroundColor: '#FAFAF9' }}
-            >
-              <div className="px-4 py-6 space-y-4">
-                {navigationLinks.map(link => (
-                  <button
-                    key={link.label}
-                    onClick={() => scrollToSection(link.href)}
-                    className="block w-full text-left font-medium py-2 transition-colors"
-                    style={{ color: '#0A1A2F' }}
-                  >
-                    {link.label}
-                  </button>
-                ))}
-                <Button 
-                  onClick={handleGetStarted}
-                  className="w-full text-white font-medium"
-                  style={{ backgroundColor: '#FF6A1A' }}
-                >
-                  Get Started
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </div>
-      </nav>
+      {/* Header */}
+      <Header onGetStarted={handleGetStarted} onNavigate={scrollToSection} />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Text */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="space-y-8"
-            >
-              <div className="space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"
-                    style={{ color: '#0A1A2F' }}>
-                  Visual Field Testing—
-                  <span style={{ color: '#FF6A1A' }}>Anywhere, Anytime.</span>
-                </h1>
-                <p className="text-xl leading-relaxed max-w-2xl"
-                   style={{ color: '#4A5568' }}>
-                  SenseEye brings accurate, AI-powered field tests to your device. 
-                  No clinic visit needed. Get clinically validated results in minutes.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  onClick={handleGetStarted}
-                  className="text-white font-medium text-lg px-8 py-4"
-                  style={{ backgroundColor: '#FF6A1A' }}
-                >
-                  Get Started
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#FAF7F2] via-white via-50% to-[#F8F5F0] to-100%">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5" />
+        <div className="max-w-8xl mx-auto px-6 py-32 sm:py-40 lg:py-48">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{
+            opacity: 0,
+            y: 30
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.8,
+            ease: "easeOut"
+          }} className="text-center lg:text-left space-y-8">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extralight text-[#1A2233] leading-[0.9] tracking-tight">
+                Revolutionary
+                <span className="block font-light text-[#FF6A1A] mt-2">Visual Field</span>
+                <span className="block font-extralight text-[#1A2233] mt-2">Testing</span>
+              </h1>
+              <div className="w-24 h-px bg-gradient-to-r from-[#FF6A1A] to-[#1A2233] mx-auto lg:mx-0" />
+              <p className="text-2xl sm:text-3xl font-light text-gray-600 leading-relaxed max-w-2xl">
+                Experience the future of eye care with SenseEye's portable VR solution. 
+                Get clinical-grade results in minutes, not hours.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-8">
+                <Button onClick={handleGetStarted} disabled={isLoading} className="group relative overflow-hidden bg-gradient-to-r from-[#FF6A1A] via-[#FF7A2A] to-[#FF6A1A] hover:from-[#E55A0F] hover:via-[#F56A1F] hover:to-[#E55A0F] text-white px-12 py-6 text-xl font-light rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1">
+                  <span className="relative z-10 flex items-center">
+                    Get Started
+                    <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Button>
-                <Button 
-                  variant="tertiary" 
-                  size="lg" 
-                  onClick={handleSeeDemo}
-                  className="font-medium text-lg px-8 py-4 border-2"
-                  style={{ color: '#0A1A2F', borderColor: '#0A1A2F' }}
-                >
+                <Button variant="ghost" onClick={() => scrollToSection('demo')} className="group text-[#FF6A1A] hover:text-[#E55A0F] px-12 py-6 text-xl font-light hover:bg-[#FF6A1A]/10 rounded-2xl transition-all duration-300">
                   See How It Works
+                  <Play className="ml-3 h-6 w-6 transition-transform group-hover:scale-110" />
                 </Button>
               </div>
             </motion.div>
-
-            {/* Right Column - App Mockup */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="relative mx-auto max-w-sm">
-                {/* Phone Frame */}
-                <div className="relative rounded-3xl p-2 shadow-2xl"
-                     style={{ backgroundColor: '#0A1A2F' }}>
-                  <div className="rounded-2xl overflow-hidden"
-                       style={{ backgroundColor: '#1A1A1A' }}>
-                    {/* Status Bar */}
-                    <div className="flex justify-between items-center px-6 py-2 text-white text-sm">
-                      <span>9:41</span>
-                      <div className="flex space-x-1">
-                        <div className="w-4 h-2 bg-white rounded-sm"></div>
-                        <div className="w-1 h-2 bg-white rounded-sm"></div>
-                      </div>
-                    </div>
-                    
-                    {/* App Content */}
-                    <div className="px-6 py-8 space-y-6">
-                      {/* Header */}
-                      <div className="text-center">
-                        <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center"
-                             style={{ backgroundColor: '#FF6A1A' }}>
-                          <Eye className="w-6 h-6 text-white" />
-                        </div>
-                        <h3 className="text-white font-semibold text-lg">Visual Field Test</h3>
-                        <p className="text-gray-400 text-sm">Right Eye - 24-2 Protocol</p>
-                      </div>
-
-                      {/* Test Grid Visualization */}
-                      <div className="bg-black rounded-lg p-6">
-                        <div className="grid grid-cols-8 gap-1">
-                          {Array.from({ length: 64 }, (_, i) => (
-                            <div
-                              key={i}
-                              className="w-2 h-2 rounded-full"
-                              style={{
-                                backgroundColor: Math.random() > 0.7 ? '#FF6A1A' : 
-                                                Math.random() > 0.5 ? '#22c55e' : '#374151'
-                              }}
-                            />
-                          ))}
-                        </div>
-                        {/* Central fixation point */}
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                        </div>
-                      </div>
-
-                      {/* Progress */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Progress</span>
-                          <span className="text-white">73%</span>
-                        </div>
-                        <div className="w-full bg-gray-700 rounded-full h-2">
-                          <div className="h-2 rounded-full" 
-                               style={{ backgroundColor: '#FF6A1A', width: '73%' }}></div>
-                        </div>
-                      </div>
-
-                      {/* Instructions */}
-                      <div className="text-center">
-                        <p className="text-gray-300 text-sm">
-                          Look at the center dot and press when you see a flash
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <motion.div initial={{
+            opacity: 0,
+            scale: 0.9,
+            x: 50
+          }} animate={{
+            opacity: 1,
+            scale: 1,
+            x: 0
+          }} transition={{
+            duration: 0.8,
+            delay: 0.3,
+            ease: "easeOut"
+          }} className="relative">
+              <div className="relative group">
+                <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=700&h=500&fit=crop" alt="Person wearing VR headset for visual field testing" className="w-full h-auto rounded-3xl shadow-3xl group-hover:shadow-4xl transition-all duration-700 transform group-hover:scale-[1.02]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#FF6A1A]/20 via-transparent to-[#1A2233]/10 rounded-3xl opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#FF6A1A]/20 to-[#1A2233]/20 rounded-3xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-700" />
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8"
-               style={{ backgroundColor: 'white' }}>
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center space-y-4 mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold"
-                style={{ color: '#0A1A2F' }}>
-              How SenseEye Works
+      {/* Elegant Divider */}
+      <div className="relative py-16">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FF6A1A]/10 to-transparent" />
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="flex items-center justify-center">
+            <div className="h-px bg-gradient-to-r from-transparent via-[#FF6A1A] to-transparent flex-1" />
+            <div className="mx-8 w-3 h-3 bg-[#FF6A1A] rounded-full shadow-lg" />
+            <div className="h-px bg-gradient-to-r from-transparent via-[#FF6A1A] to-transparent flex-1" />
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works */}
+      <section id="how-it-works" className="py-32 sm:py-40 bg-gradient-to-br from-white via-[#FAF7F2] to-white">
+        <div className="max-w-8xl mx-auto px-6">
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.8
+        }} viewport={{
+          once: true
+        }} className="text-center mb-24 space-y-6">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extralight text-[#1A2233] tracking-tight">
+              How It Works
             </h2>
-            <p className="text-xl max-w-2xl mx-auto"
-               style={{ color: '#4A5568' }}>
-              Three simple steps to accurate visual field testing
+            <div className="w-32 h-px bg-gradient-to-r from-[#FF6A1A] to-[#1A2233] mx-auto" />
+            <p className="text-2xl font-light text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Three simple steps to comprehensive visual field analysis
             </p>
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                step: "1",
-                icon: Smartphone,
-                title: "Start Test",
-                description: "Launch from any device. No downloads or accounts required."
-              },
-              {
-                step: "2",
-                icon: Headphones,
-                title: "Follow Prompts",
-                description: "Voice-guided, accessible instructions walk you through each step."
-              },
-              {
-                step: "3",
-                icon: CheckCircle,
-                title: "Get Results",
-                description: "Clinically accurate reports in minutes, ready to share with your doctor."
-              }
-            ].map((step, index) => (
-              <motion.div
-                key={step.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center space-y-6"
-              >
-                <div className="relative">
-                  <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center"
-                       style={{ backgroundColor: '#FF6A1A' }}>
-                    <step.icon className="w-10 h-10 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+            {howItWorksSteps.map((step, index) => <motion.div key={step.step} initial={{
+            opacity: 0,
+            y: 40
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.8,
+            delay: index * 0.2
+          }} viewport={{
+            once: true
+          }} whileHover={{
+            scale: 1.05,
+            y: -10
+          }} className="text-center group cursor-pointer">
+                <div className="relative mb-8">
+                  <div className="w-28 h-28 bg-gradient-to-br from-[#FF6A1A] via-[#FF7A2A] to-[#FF6A1A] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:shadow-3xl transition-all duration-500 transform group-hover:scale-110">
+                    <step.icon className="h-14 w-14 text-white" />
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
-                       style={{ backgroundColor: '#0A1A2F' }}>
+                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-[#1A2233] to-[#2A3243] text-white rounded-full flex items-center justify-center text-lg font-light shadow-2xl">
                     {step.step}
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-semibold"
-                      style={{ color: '#0A1A2F' }}>
-                    {step.title}
-                  </h3>
-                  <p style={{ color: '#4A5568' }}>
-                    {step.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+                <h3 className="text-3xl font-light text-[#1A2233] mb-6">{step.title}</h3>
+                <p className="text-lg font-light text-gray-600 leading-relaxed max-w-sm mx-auto">{step.description}</p>
+              </motion.div>)}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center space-y-4 mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold"
-                style={{ color: '#0A1A2F' }}>
+      {/* Key Benefits */}
+      <section id="benefits" className="py-32 sm:py-40 bg-gradient-to-br from-[#FAF7F2] via-[#F8F5F0] to-[#FAF7F2]">
+        <div className="max-w-8xl mx-auto px-6">
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.8
+        }} viewport={{
+          once: true
+        }} className="text-center mb-24 space-y-6">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extralight text-[#1A2233] tracking-tight">
               Why Choose SenseEye?
             </h2>
-            <p className="text-xl max-w-2xl mx-auto"
-               style={{ color: '#4A5568' }}>
-              Advanced technology meets accessibility for everyone
+            <div className="w-32 h-px bg-gradient-to-r from-[#FF6A1A] to-[#1A2233] mx-auto" />
+            <p className="text-2xl font-light text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Advanced technology meets clinical excellence for superior patient care
             </p>
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Card className="h-full p-8 text-center space-y-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-                        style={{ backgroundColor: 'white', borderColor: '#E5E5E5' }}>
-                    <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center"
-                         style={{ backgroundColor: 'rgba(255, 106, 26, 0.1)' }}>
-                      <Icon className="w-8 h-8" style={{ color: '#FF6A1A' }} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            {benefits.map((benefit, index) => <motion.div key={benefit.title} initial={{
+            opacity: 0,
+            y: 40
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.8,
+            delay: index * 0.15
+          }} viewport={{
+            once: true
+          }} whileHover={{
+            y: -15,
+            scale: 1.02
+          }}>
+                <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <CardHeader className="text-center pb-6 pt-12 relative z-10">
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#FF6A1A]/20 via-[#FF6A1A]/10 to-transparent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <benefit.icon className="h-10 w-10 text-[#FF6A1A]" />
                     </div>
-                    <div className="space-y-3">
-                      <h3 className="text-xl font-semibold"
-                          style={{ color: '#0A1A2F' }}>
-                        {feature.title}
-                      </h3>
-                      <p style={{ color: '#4A5568' }}>
-                        {feature.description}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-center space-x-2 font-medium"
-                         style={{ color: '#FF6A1A' }}>
-                      <CheckCircle className="h-4 w-4" />
-                      <span className="text-sm">Available Now</span>
-                    </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
+                    <CardTitle className="text-2xl font-light text-[#1A2233]">
+                      {benefit.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center px-8 pb-12 relative z-10">
+                    <p className="text-lg font-light text-gray-600 leading-relaxed">{benefit.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>)}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8"
-               style={{ backgroundColor: '#0A1A2F' }}>
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center space-y-4 mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Trusted by Patients and Professionals
+      {/* Capital Demo */}
+      <section id="demo" className="py-32 sm:py-40 bg-gradient-to-br from-white via-[#FAF7F2] to-white">
+        <CapitalDemo />
+      </section>
+
+      {/* Testimonials */}
+      <section id="testimonials" className="py-32 sm:py-40 bg-gradient-to-br from-gray-50 via-white to-gray-50">
+        <div className="max-w-8xl mx-auto px-6">
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.8
+        }} viewport={{
+          once: true
+        }} className="text-center mb-24 space-y-6">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extralight text-[#1A2233] tracking-tight">
+              Trusted by Professionals
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              See what people are saying about SenseEye
+            <div className="w-32 h-px bg-gradient-to-r from-[#FF6A1A] to-[#1A2233] mx-auto" />
+            <p className="text-2xl font-light text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              See what healthcare providers and patients are saying about SenseEye
             </p>
           </motion.div>
-
-          <div className="relative max-w-4xl mx-auto">
-            <Card style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.1)' }}>
-              <div className="p-12 text-center space-y-6">
-                <div className="flex justify-center space-x-1 mb-6">
-                  {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                
-                <blockquote className="text-xl text-gray-300 leading-relaxed italic">
-                  "{testimonials[currentTestimonial].quote}"
-                </blockquote>
-                
-                <div className="flex items-center justify-center space-x-4">
-                  <img
-                    src={testimonials[currentTestimonial].avatar}
-                    alt={`${testimonials[currentTestimonial].name} profile picture`}
-                    className="w-16 h-16 rounded-full object-cover ring-2"
-                    style={{ ringColor: '#FF6A1A' }}
-                  />
-                  <div className="text-left">
-                    <p className="font-semibold text-white">
-                      {testimonials[currentTestimonial].name}
-                    </p>
-                    <p className="text-gray-400">
-                      {testimonials[currentTestimonial].role}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            {/* Navigation */}
-            <div className="flex justify-center space-x-4 mt-8">
-              <button
-                onClick={prevTestimonial}
-                className="p-3 rounded-full border border-gray-600 text-white hover:bg-gray-800 transition-colors"
-                aria-label="Previous testimonial"
-              >
-                <ArrowRight className="h-4 w-4 rotate-180" />
-              </button>
-              
-              <div className="flex space-x-2 items-center">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentTestimonial ? 'bg-white' : 'bg-gray-600'
-                    }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
-                  />
-                ))}
-              </div>
-              
-              <button
-                onClick={nextTestimonial}
-                className="p-3 rounded-full border border-gray-600 text-white hover:bg-gray-800 transition-colors"
-                aria-label="Next testimonial"
-              >
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+          <Carousel className="max-w-6xl mx-auto">
+            <CarouselContent>
+              {testimonials.map(testimonial => <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3">
+                  <motion.div whileHover={{
+                scale: 1.03,
+                y: -10
+              }} className="p-6">
+                    <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                      <CardContent className="p-8 relative z-10">
+                        <div className="flex items-center mb-6">
+                          {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />)}
+                        </div>
+                        <blockquote className="text-lg font-light text-gray-700 mb-8 leading-relaxed italic">
+                          "{testimonial.quote}"
+                        </blockquote>
+                        <div className="flex items-center">
+                          <Avatar className="h-16 w-16 mr-4 ring-2 ring-[#FF6A1A]/20">
+                            <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                            <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-light text-lg text-[#1A2233]">{testimonial.name}</p>
+                            <p className="text-base font-light text-gray-600">{testimonial.role}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </CarouselItem>)}
+            </CarouselContent>
+            <CarouselPrevious className="shadow-2xl" />
+            <CarouselNext className="shadow-2xl" />
+          </Carousel>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8"
-               style={{ backgroundColor: 'white' }}>
+      <section id="faq" className="py-32 sm:py-40 bg-gradient-to-br from-[#FAF7F2] via-[#F8F5F0] to-[#FAF7F2]">
         <FAQSection />
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8"
-               style={{ backgroundColor: 'rgba(255, 106, 26, 0.05)' }}>
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold"
-                style={{ color: '#0A1A2F' }}>
-              Ready to Transform Your Vision Care?
-            </h2>
-            <p className="text-xl"
-               style={{ color: '#4A5568' }}>
-              Join thousands who trust SenseEye for accurate, convenient visual field testing.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                onClick={handleGetStarted}
-                className="text-white font-medium text-lg px-8 py-4"
-                style={{ backgroundColor: '#FF6A1A' }}
-              >
-                <Shield className="h-5 w-5 mr-2" />
-                Start Free Test
-              </Button>
-              <Button 
-                variant="tertiary" 
-                size="lg"
-                className="font-medium text-lg px-8 py-4 border-2"
-                style={{ color: '#0A1A2F', borderColor: '#0A1A2F' }}
-              >
-                Schedule Demo
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8"
-              style={{ backgroundColor: '#0A1A2F' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Logo and Description */}
-            <div className="md:col-span-2 space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center"
-                     style={{ backgroundColor: '#FF6A1A' }}>
-                  <Eye className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-white">SenseEye</h3>
+      <footer className="bg-gradient-to-br from-[#1A2233] via-[#2A3243] to-[#1A2233] text-white py-24">
+        <div className="max-w-8xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center mb-6">
+                <Eye className="h-10 w-10 text-[#FF6A1A] mr-4" />
+                <span className="text-3xl font-extralight">SenseEye</span>
               </div>
-              <p className="text-gray-300 max-w-md">
-                Advanced visual field testing platform that brings clinical-grade accuracy 
-                to any device, anywhere.
+              <p className="text-gray-300 mb-8 max-w-md text-lg font-light leading-relaxed">
+                Revolutionary VR-based visual field testing for the modern healthcare provider.
               </p>
-              <div className="flex space-x-4">
-                <button className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
-                        aria-label="Twitter">
-                  <Twitter className="h-5 w-5 text-gray-400 hover:text-white" />
-                </button>
-                <button className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
-                        aria-label="LinkedIn">
-                  <Linkedin className="h-5 w-5 text-gray-400 hover:text-white" />
-                </button>
-                <button className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
-                        aria-label="Facebook">
-                  <Facebook className="h-5 w-5 text-gray-400 hover:text-white" />
-                </button>
+              <div className="flex space-x-6">
+                <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white hover:bg-white/10 w-12 h-12 rounded-full transition-all duration-300 hover:scale-110">
+                  <Twitter className="h-6 w-6" />
+                </Button>
+                <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white hover:bg-white/10 w-12 h-12 rounded-full transition-all duration-300 hover:scale-110">
+                  <Linkedin className="h-6 w-6" />
+                </Button>
+                <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white hover:bg-white/10 w-12 h-12 rounded-full transition-all duration-300 hover:scale-110">
+                  <Facebook className="h-6 w-6" />
+                </Button>
               </div>
             </div>
-
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h4 className="font-semibold text-white">Quick Links</h4>
-              <ul className="space-y-2">
-                {navigationLinks.map(link => (
-                  <li key={link.label}>
-                    <button 
-                      onClick={() => scrollToSection(link.href)}
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
+            <div>
+              <h3 className="font-light text-xl mb-6">Quick Links</h3>
+              <ul className="space-y-4">
+                <li><button onClick={() => scrollToSection('how-it-works')} className="text-gray-300 hover:text-white transition-colors font-light text-lg">How It Works</button></li>
+                <li><button onClick={() => scrollToSection('benefits')} className="text-gray-300 hover:text-white transition-colors font-light text-lg">Benefits</button></li>
+                <li><button onClick={() => scrollToSection('demo')} className="text-gray-300 hover:text-white transition-colors font-light text-lg">Demo</button></li>
+                <li><button onClick={() => scrollToSection('testimonials')} className="text-gray-300 hover:text-white transition-colors font-light text-lg">Testimonials</button></li>
               </ul>
             </div>
-
-            {/* Legal & Contact */}
-            <div className="space-y-4">
-              <h4 className="font-semibold text-white">Legal</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                    Terms of Service
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-300 hover:text-white transition-colors">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <div className="flex items-center space-x-2">
-                    <Mail className="h-4 w-4 text-gray-400" />
-                    <a href="mailto:contact@senseeye.com" 
-                       className="text-gray-300 hover:text-white transition-colors">
-                      contact@senseeye.com
-                    </a>
-                  </div>
-                </li>
+            <div>
+              <h3 className="font-light text-xl mb-6">Legal</h3>
+              <ul className="space-y-4">
+                <li><a href="#" className="text-gray-300 hover:text-white transition-colors font-light text-lg">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white transition-colors font-light text-lg">Terms of Service</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white transition-colors font-light text-lg">Contact</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white transition-colors font-light text-lg">About</a></li>
               </ul>
             </div>
           </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
-            <p className="text-gray-400">
+          
+          {/* Elegant Footer Divider */}
+          <div className="relative py-8 mb-8">
+            <div className="flex items-center justify-center">
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent flex-1" />
+              <div className="mx-8 w-2 h-2 bg-gray-600 rounded-full" />
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent flex-1" />
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <p className="text-gray-300 text-lg font-light mb-4 sm:mb-0">
               © 2024 SenseEye. All rights reserved.
             </p>
-            <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-              <span className="text-gray-400 text-sm">🔧 Built with</span>
-              <span className="font-medium" style={{ color: '#FF6A1A' }}>Bolt.new</span>
-            </div>
+            <Badge variant="outline" className="border-gray-600 text-gray-300 px-4 py-2 text-base font-light">
+              Built with Bolt.new
+            </Badge>
           </div>
         </div>
       </footer>
-    </div>
-  );
-};
+
+      {/* Sign Up Modal */}
+      <SignUpModal isOpen={isSignUpModalOpen} onClose={() => setIsSignUpModalOpen(false)} />
+
+      {/* GDPR Cookie Consent */}
+      {showCookieConsent && <motion.div initial={{
+      y: 100,
+      opacity: 0
+    }} animate={{
+      y: 0,
+      opacity: 1
+    }} className="fixed bottom-6 left-6 right-6 z-50 max-w-lg mx-auto">
+          <Card className="bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl rounded-2xl overflow-hidden">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 mr-4">
+                  <p className="text-base font-light text-gray-700 mb-4 leading-relaxed">
+                    We use cookies to enhance your experience and analyze site usage. 
+                    By continuing, you agree to our cookie policy.
+                  </p>
+                  <div className="flex gap-3">
+                    <Button onClick={handleAcceptCookies} size="sm" className="bg-gradient-to-r from-[#FF6A1A] to-[#FF7A2A] hover:from-[#E55A0F] hover:to-[#F56A1F] text-white px-6 py-2 font-light rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                      Accept
+                    </Button>
+                    <Button onClick={handleAcceptCookies} variant="outline" size="sm" className="px-6 py-2 font-light rounded-lg">
+                      Decline
+                    </Button>
+                  </div>
+                </div>
+                <Button onClick={handleAcceptCookies} variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-gray-600 rounded-full">
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>}
+    </div>;
+}
