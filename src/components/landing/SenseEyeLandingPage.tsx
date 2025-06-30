@@ -4,11 +4,12 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
-import { User, Eye, Star, CheckCircle, Play, Mail, Lock, Github, Facebook, Twitter, Linkedin, ArrowRight, Zap, Shield, Clock, Award, X, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { User, Eye, Star, CheckCircle, Play, Mail, Lock, Github, Facebook, Twitter, Linkedin, ArrowRight, Zap, Shield, Clock, Award, X, ChevronDown, ChevronLeft, ChevronRight, Smartphone, Brain, Users, Globe, Heart, Stethoscope } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
+import { Carousel, CarouselItem } from "../ui/carousel";
 import Header from "./Header";
 import SignUpModal from "./SignUpModal";
 import CapitalDemo from "./CapitalDemo";
@@ -23,24 +24,45 @@ const testimonials = [
     id: 1,
     name: "Dr. Sarah Chen",
     role: "Ophthalmologist",
+    hospital: "Johns Hopkins Hospital",
     avatar: "https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?w=100&h=100&fit=crop&crop=face",
-    quote: "SenseEye has revolutionized how we conduct visual field tests. The accuracy and ease of use are remarkable.",
+    quote: "SenseEye has revolutionized how we conduct visual field tests. The accuracy and ease of use are remarkable. Our patients love the comfortable VR experience.",
     rating: 5
   },
   {
     id: 2,
     name: "Michael Rodriguez",
     role: "Patient",
+    condition: "Glaucoma Monitoring",
     avatar: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?w=100&h=100&fit=crop&crop=face",
-    quote: "Finally, a visual field test I can do from home. The VR experience is comfortable and the results are instant.",
+    quote: "Finally, a visual field test I can do from home. The VR experience is comfortable and the results are instant. It's changed how I manage my condition.",
     rating: 5
   },
   {
     id: 3,
     name: "Dr. James Wilson",
     role: "Neurologist",
+    hospital: "Mayo Clinic",
     avatar: "https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?w=100&h=100&fit=crop&crop=face",
-    quote: "The precision and reliability of SenseEye's testing protocol exceeds traditional methods. Highly recommended.",
+    quote: "The precision and reliability of SenseEye's testing protocol exceeds traditional methods. It's become an essential tool in our practice.",
+    rating: 5
+  },
+  {
+    id: 4,
+    name: "Dr. Emily Thompson",
+    role: "Optometrist",
+    hospital: "Cleveland Clinic",
+    avatar: "https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?w=100&h=100&fit=crop&crop=face",
+    quote: "The patient compliance and comfort with SenseEye is outstanding. We've seen a 40% reduction in test retakes due to patient fatigue.",
+    rating: 5
+  },
+  {
+    id: 5,
+    name: "Robert Kim",
+    role: "Patient",
+    condition: "Diabetic Retinopathy",
+    avatar: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?w=100&h=100&fit=crop&crop=face",
+    quote: "Being able to monitor my vision at home gives me peace of mind. The technology is incredible and the results help my doctor track my progress.",
     rating: 5
   }
 ];
@@ -49,22 +71,38 @@ const benefits = [
   {
     icon: Zap,
     title: "Lightning Fast Results",
-    description: "Get comprehensive visual field analysis in under 5 minutes with our advanced VR technology."
+    description: "Get comprehensive visual field analysis in under 5 minutes with our advanced VR technology.",
+    color: "from-yellow-400 to-orange-500"
   },
   {
     icon: Shield,
     title: "Clinical Grade Accuracy",
-    description: "FDA-approved testing protocols ensure results you can trust for medical decisions."
+    description: "FDA-approved testing protocols ensure results you can trust for medical decisions.",
+    color: "from-green-400 to-blue-500"
   },
   {
     icon: Clock,
     title: "Convenient Testing",
-    description: "Test from home or clinic with our portable VR headset and intuitive interface."
+    description: "Test from home or clinic with our portable VR headset and intuitive interface.",
+    color: "from-purple-400 to-pink-500"
   },
   {
     icon: Award,
     title: "Expert Validated",
-    description: "Developed with leading ophthalmologists and validated across thousands of patients."
+    description: "Developed with leading ophthalmologists and validated across thousands of patients.",
+    color: "from-blue-400 to-indigo-500"
+  },
+  {
+    icon: Heart,
+    title: "Patient Comfort",
+    description: "Immersive VR environment reduces anxiety and improves patient compliance.",
+    color: "from-red-400 to-pink-500"
+  },
+  {
+    icon: Brain,
+    title: "AI-Powered Insights",
+    description: "Advanced machine learning provides detailed analysis and predictive insights.",
+    color: "from-indigo-400 to-purple-500"
   }
 ];
 
@@ -72,86 +110,59 @@ const howItWorksSteps = [
   {
     step: 1,
     title: "Calibrate",
-    description: "Put on the VR headset and complete a quick 30-second calibration process.",
-    icon: Eye
+    description: "Put on the VR headset and complete a quick 30-second calibration process tailored to your vision.",
+    icon: Eye,
+    image: "https://images.pexels.com/photos/8566473/pexels-photo-8566473.jpeg?w=400&h=300&fit=crop"
   },
   {
     step: 2,
     title: "Test",
-    description: "Follow the guided visual field test with interactive prompts and real-time feedback.",
-    icon: User
+    description: "Follow the guided visual field test with interactive prompts and real-time feedback in an immersive environment.",
+    icon: User,
+    image: "https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?w=400&h=300&fit=crop"
   },
   {
     step: 3,
     title: "Get Results",
-    description: "Receive detailed analysis and recommendations instantly on your device.",
-    icon: CheckCircle
+    description: "Receive detailed analysis and recommendations instantly on your device with comprehensive reporting.",
+    icon: CheckCircle,
+    image: "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?w=400&h=300&fit=crop"
   }
 ];
 
-// Simple Carousel Component
-const SimpleCarousel = ({ children }: { children: React.ReactNode[] }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const totalItems = React.Children.count(children);
+const features = [
+  {
+    icon: Smartphone,
+    title: "Mobile Integration",
+    description: "Seamlessly sync with mobile devices for remote monitoring and data access.",
+    image: "https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg?w=300&h=200&fit=crop"
+  },
+  {
+    icon: Globe,
+    title: "Cloud Analytics",
+    description: "Secure cloud-based analysis with real-time data processing and storage.",
+    image: "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg?w=300&h=200&fit=crop"
+  },
+  {
+    icon: Users,
+    title: "Multi-User Support",
+    description: "Support for multiple healthcare providers with role-based access control.",
+    image: "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?w=300&h=200&fit=crop"
+  },
+  {
+    icon: Stethoscope,
+    title: "Clinical Integration",
+    description: "Direct integration with EMR systems and clinical workflows.",
+    image: "https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?w=300&h=200&fit=crop"
+  }
+];
 
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
-  };
-
-  return (
-    <div className="relative max-w-6xl mx-auto">
-      <div className="overflow-hidden">
-        <div 
-          className="flex transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {React.Children.map(children, (child, index) => (
-            <div key={index} className="w-full flex-shrink-0 px-3">
-              {child}
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      {totalItems > 1 && (
-        <>
-          <Button
-            onClick={goToPrevious}
-            variant="tertiary"
-            size="sm"
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
-          <Button
-            onClick={goToNext}
-            variant="tertiary"
-            size="sm"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
-        </>
-      )}
-      
-      <div className="flex justify-center mt-6 space-x-2">
-        {Array.from({ length: totalItems }).map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-200 ${
-              index === currentIndex ? 'bg-[#FF6A1A]' : 'bg-gray-300'
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+const stats = [
+  { number: "95%", label: "Accuracy Rate", description: "Compared to traditional perimetry" },
+  { number: "5min", label: "Test Duration", description: "Average time per eye" },
+  { number: "500+", label: "Healthcare Providers", description: "Trust SenseEye worldwide" },
+  { number: "50k+", label: "Tests Completed", description: "Successful visual field assessments" }
+];
 
 export default function SenseEyeLandingPage({ className }: SenseEyeLandingPageProps) {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -186,7 +197,7 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
       {/* Header */}
       <Header onGetStarted={handleGetStarted} onNavigate={scrollToSection} />
 
-      {/* Hero Section */}
+      {/* Hero Section with Carousel */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#FAF7F2] via-white via-50% to-[#F8F5F0] to-100%">
         <div className="absolute inset-0 bg-gradient-to-r from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5" />
         <div className="max-w-8xl mx-auto px-6 py-32 sm:py-40 lg:py-48">
@@ -207,6 +218,22 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
                 Experience the future of eye care with SenseEye's portable VR solution. 
                 Get clinical-grade results in minutes, not hours.
               </p>
+              
+              {/* Stats Carousel */}
+              <div className="pt-8">
+                <Carousel autoPlay={true} autoPlayInterval={3000} showArrows={false} className="max-w-md mx-auto lg:mx-0">
+                  {stats.map((stat, index) => (
+                    <CarouselItem key={index}>
+                      <div className="text-center lg:text-left bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                        <div className="text-4xl font-light text-[#FF6A1A] mb-2">{stat.number}</div>
+                        <div className="text-lg font-medium text-[#1A2233] mb-1">{stat.label}</div>
+                        <div className="text-sm text-gray-600">{stat.description}</div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </Carousel>
+              </div>
+              
               <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start pt-8">
                 <Button 
                   onClick={handleGetStarted} 
@@ -229,21 +256,47 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
                 </Button>
               </div>
             </motion.div>
+            
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, x: 50 }} 
               animate={{ opacity: 1, scale: 1, x: 0 }} 
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }} 
               className="relative"
             >
-              <div className="relative group">
-                <img 
-                  src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?w=700&h=500&fit=crop" 
-                  alt="SenseEye dashboard interface showing visual field testing analytics" 
-                  className="w-full h-auto rounded-3xl shadow-3xl group-hover:shadow-4xl transition-all duration-700 transform group-hover:scale-[1.02]" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#FF6A1A]/20 via-transparent to-[#1A2233]/10 rounded-3xl opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
-                <div className="absolute -inset-4 bg-gradient-to-r from-[#FF6A1A]/20 to-[#1A2233]/20 rounded-3xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-700" />
-              </div>
+              {/* Hero Image Carousel */}
+              <Carousel autoPlay={true} autoPlayInterval={4000} showDots={false} className="relative group">
+                <CarouselItem>
+                  <div className="relative">
+                    <img 
+                      src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?w=700&h=500&fit=crop" 
+                      alt="SenseEye dashboard interface showing visual field testing analytics" 
+                      className="w-full h-auto rounded-3xl shadow-3xl group-hover:shadow-4xl transition-all duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#FF6A1A]/20 via-transparent to-[#1A2233]/10 rounded-3xl opacity-60" />
+                  </div>
+                </CarouselItem>
+                <CarouselItem>
+                  <div className="relative">
+                    <img 
+                      src="https://images.pexels.com/photos/8566473/pexels-photo-8566473.jpeg?w=700&h=500&fit=crop" 
+                      alt="Patient using SenseEye VR headset for visual field testing" 
+                      className="w-full h-auto rounded-3xl shadow-3xl group-hover:shadow-4xl transition-all duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#FF6A1A]/20 via-transparent to-[#1A2233]/10 rounded-3xl opacity-60" />
+                  </div>
+                </CarouselItem>
+                <CarouselItem>
+                  <div className="relative">
+                    <img 
+                      src="https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?w=700&h=500&fit=crop" 
+                      alt="Healthcare provider reviewing SenseEye test results" 
+                      className="w-full h-auto rounded-3xl shadow-3xl group-hover:shadow-4xl transition-all duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#FF6A1A]/20 via-transparent to-[#1A2233]/10 rounded-3xl opacity-60" />
+                  </div>
+                </CarouselItem>
+              </Carousel>
+              <div className="absolute -inset-4 bg-gradient-to-r from-[#FF6A1A]/20 to-[#1A2233]/20 rounded-3xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-700" />
             </motion.div>
           </div>
         </div>
@@ -261,7 +314,7 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
         </div>
       </div>
 
-      {/* How It Works */}
+      {/* How It Works with Enhanced Carousel */}
       <section id="how-it-works" className="py-32 sm:py-40 bg-gradient-to-br from-white via-[#FAF7F2] to-white">
         <div className="max-w-8xl mx-auto px-6">
           <motion.div 
@@ -279,7 +332,9 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
               Three simple steps to comprehensive visual field analysis
             </p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+          
+          {/* Desktop View */}
+          <div className="hidden lg:grid grid-cols-3 gap-16">
             {howItWorksSteps.map((step, index) => (
               <motion.div 
                 key={step.step} 
@@ -291,22 +346,54 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
                 className="text-center group cursor-pointer"
               >
                 <div className="relative mb-8">
-                  <div className="w-28 h-28 bg-gradient-to-br from-[#FF6A1A] via-[#FF7A2A] to-[#FF6A1A] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:shadow-3xl transition-all duration-500 transform group-hover:scale-110">
-                    <step.icon className="h-14 w-14 text-white" />
-                  </div>
+                  <img 
+                    src={step.image} 
+                    alt={step.title}
+                    className="w-full h-48 object-cover rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-500"
+                  />
                   <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-[#1A2233] to-[#2A3243] text-white rounded-full flex items-center justify-center text-lg font-light shadow-2xl">
                     {step.step}
                   </div>
                 </div>
                 <h3 className="text-3xl font-light text-[#1A2233] mb-6">{step.title}</h3>
-                <p className="text-lg font-light text-gray-600 leading-relaxed max-w-sm mx-auto">{step.description}</p>
+                <p className="text-lg font-light text-gray-600 leading-relaxed">{step.description}</p>
               </motion.div>
             ))}
+          </div>
+          
+          {/* Mobile Carousel */}
+          <div className="lg:hidden">
+            <Carousel showDots={true} showArrows={true}>
+              {howItWorksSteps.map((step, index) => (
+                <CarouselItem key={step.step}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 40 }} 
+                    whileInView={{ opacity: 1, y: 0 }} 
+                    transition={{ duration: 0.8 }} 
+                    viewport={{ once: true }} 
+                    className="text-center px-4"
+                  >
+                    <div className="relative mb-8">
+                      <img 
+                        src={step.image} 
+                        alt={step.title}
+                        className="w-full h-64 object-cover rounded-2xl shadow-lg"
+                      />
+                      <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-[#1A2233] to-[#2A3243] text-white rounded-full flex items-center justify-center text-lg font-light shadow-2xl">
+                        {step.step}
+                      </div>
+                    </div>
+                    <h3 className="text-3xl font-light text-[#1A2233] mb-6">{step.title}</h3>
+                    <p className="text-lg font-light text-gray-600 leading-relaxed max-w-md mx-auto">{step.description}</p>
+                  </motion.div>
+                </CarouselItem>
+              ))}
+            </Carousel>
           </div>
         </div>
       </section>
 
-      {/* Key Benefits */}
+      {/* Key Benefits with Enhanced Carousel */}
       <section id="benefits" className="py-32 sm:py-40 bg-gradient-to-br from-[#FAF7F2] via-[#F8F5F0] to-[#FAF7F2]">
         <div className="max-w-8xl mx-auto px-6">
           <motion.div 
@@ -324,7 +411,9 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
               Advanced technology meets clinical excellence for superior patient care
             </p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          
+          {/* Desktop Grid */}
+          <div className="hidden lg:grid grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
               <motion.div 
                 key={benefit.title} 
@@ -335,10 +424,10 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
                 whileHover={{ y: -15, scale: 1.02 }}
               >
                 <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${benefit.color} opacity-0 group-hover:opacity-10 transition-opacity duration-700`} />
                   <CardHeader className="text-center pb-6 pt-12 relative z-10">
-                    <div className="w-20 h-20 bg-gradient-to-br from-[#FF6A1A]/20 via-[#FF6A1A]/10 to-transparent rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
-                      <benefit.icon className="h-10 w-10 text-[#FF6A1A]" />
+                    <div className={`w-20 h-20 bg-gradient-to-br ${benefit.color} rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg`}>
+                      <benefit.icon className="h-10 w-10 text-white" />
                     </div>
                     <CardTitle className="text-2xl font-light text-[#1A2233]">
                       {benefit.title}
@@ -351,15 +440,106 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
               </motion.div>
             ))}
           </div>
+          
+          {/* Mobile Carousel */}
+          <div className="lg:hidden">
+            <Carousel showDots={true} showArrows={true} autoPlay={true} autoPlayInterval={4000}>
+              {benefits.map((benefit, index) => (
+                <CarouselItem key={benefit.title}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 40 }} 
+                    whileInView={{ opacity: 1, y: 0 }} 
+                    transition={{ duration: 0.8 }} 
+                    viewport={{ once: true }} 
+                    className="px-4"
+                  >
+                    <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl rounded-3xl overflow-hidden">
+                      <div className={`absolute inset-0 bg-gradient-to-br ${benefit.color} opacity-10`} />
+                      <CardHeader className="text-center pb-6 pt-12 relative z-10">
+                        <div className={`w-20 h-20 bg-gradient-to-br ${benefit.color} rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg`}>
+                          <benefit.icon className="h-10 w-10 text-white" />
+                        </div>
+                        <CardTitle className="text-2xl font-light text-[#1A2233]">
+                          {benefit.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-center px-8 pb-12 relative z-10">
+                        <p className="text-lg font-light text-gray-600 leading-relaxed">{benefit.description}</p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </CarouselItem>
+              ))}
+            </Carousel>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Carousel */}
+      <section id="features" className="py-32 sm:py-40 bg-gradient-to-br from-white via-[#FAF7F2] to-white">
+        <div className="max-w-8xl mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.8 }} 
+            viewport={{ once: true }} 
+            className="text-center mb-24 space-y-6"
+          >
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extralight text-[#1A2233] tracking-tight">
+              Advanced Features
+            </h2>
+            <div className="w-32 h-px bg-gradient-to-r from-[#FF6A1A] to-[#1A2233] mx-auto" />
+            <p className="text-2xl font-light text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Cutting-edge technology designed for modern healthcare
+            </p>
+          </motion.div>
+          
+          <Carousel showDots={true} showArrows={true} autoPlay={true} autoPlayInterval={5000}>
+            {features.map((feature, index) => (
+              <CarouselItem key={feature.title}>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }} 
+                  whileInView={{ opacity: 1, scale: 1 }} 
+                  transition={{ duration: 0.8 }} 
+                  viewport={{ once: true }} 
+                  className="px-4"
+                >
+                  <Card className="bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl rounded-3xl overflow-hidden">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+                      <div className="flex flex-col justify-center space-y-6">
+                        <div className="w-16 h-16 bg-gradient-to-br from-[#FF6A1A] to-[#FF7A2A] rounded-2xl flex items-center justify-center shadow-lg">
+                          <feature.icon className="h-8 w-8 text-white" />
+                        </div>
+                        <h3 className="text-4xl font-light text-[#1A2233]">{feature.title}</h3>
+                        <p className="text-xl font-light text-gray-600 leading-relaxed">{feature.description}</p>
+                        <Button className="w-fit bg-[#FF6A1A] hover:bg-[#E55A0F] text-white px-8 py-3 rounded-xl">
+                          Learn More
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                      </div>
+                      <div className="relative">
+                        <img 
+                          src={feature.image} 
+                          alt={feature.title}
+                          className="w-full h-64 lg:h-80 object-cover rounded-2xl shadow-lg"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#FF6A1A]/20 via-transparent to-transparent rounded-2xl" />
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              </CarouselItem>
+            ))}
+          </Carousel>
         </div>
       </section>
 
       {/* Capital Demo */}
-      <section id="demo" className="py-32 sm:py-40 bg-gradient-to-br from-white via-[#FAF7F2] to-white">
+      <section id="demo" className="py-32 sm:py-40 bg-gradient-to-br from-[#FAF7F2] via-[#F8F5F0] to-[#FAF7F2]">
         <CapitalDemo />
       </section>
 
-      {/* Testimonials */}
+      {/* Enhanced Testimonials Carousel */}
       <section id="testimonials" className="py-32 sm:py-40 bg-gradient-to-br from-gray-50 via-white to-gray-50">
         <div className="max-w-8xl mx-auto px-6">
           <motion.div 
@@ -378,35 +558,46 @@ export default function SenseEyeLandingPage({ className }: SenseEyeLandingPagePr
             </p>
           </motion.div>
           
-          <SimpleCarousel>
+          <Carousel showDots={true} showArrows={true} autoPlay={true} autoPlayInterval={6000}>
             {testimonials.map((testimonial) => (
-              <motion.div key={testimonial.id} whileHover={{ scale: 1.03, y: -10 }} className="p-6">
-                <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <CardContent className="p-8 relative z-10">
-                    <div className="flex items-center mb-6">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
-                      ))}
-                    </div>
-                    <blockquote className="text-lg font-light text-gray-700 mb-8 leading-relaxed italic">
-                      "{testimonial.quote}"
-                    </blockquote>
-                    <div className="flex items-center">
-                      <Avatar className="h-16 w-16 mr-4 ring-2 ring-[#FF6A1A]/20">
-                        <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                        <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-light text-lg text-[#1A2233]">{testimonial.name}</p>
-                        <p className="text-base font-light text-gray-600">{testimonial.role}</p>
+              <CarouselItem key={testimonial.id}>
+                <motion.div 
+                  whileHover={{ scale: 1.02, y: -5 }} 
+                  className="px-4"
+                >
+                  <Card className="h-full bg-gradient-to-br from-white via-white to-[#FAF7F2] border-0 shadow-3xl hover:shadow-4xl transition-all duration-700 rounded-3xl overflow-hidden group max-w-4xl mx-auto">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A1A]/5 via-transparent to-[#1A2233]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <CardContent className="p-12 relative z-10">
+                      <div className="flex items-center mb-8">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="h-8 w-8 text-yellow-400 fill-current" />
+                        ))}
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                      <blockquote className="text-2xl font-light text-gray-700 mb-12 leading-relaxed italic">
+                        "{testimonial.quote}"
+                      </blockquote>
+                      <div className="flex items-center justify-center">
+                        <Avatar className="h-20 w-20 mr-6 ring-4 ring-[#FF6A1A]/20">
+                          <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                          <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <div className="text-center">
+                          <p className="font-light text-2xl text-[#1A2233] mb-2">{testimonial.name}</p>
+                          <p className="text-lg font-light text-gray-600 mb-1">{testimonial.role}</p>
+                          {testimonial.hospital && (
+                            <p className="text-base font-light text-[#FF6A1A]">{testimonial.hospital}</p>
+                          )}
+                          {testimonial.condition && (
+                            <p className="text-base font-light text-[#FF6A1A]">{testimonial.condition}</p>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </CarouselItem>
             ))}
-          </SimpleCarousel>
+          </Carousel>
         </div>
       </section>
 
