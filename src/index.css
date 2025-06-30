@@ -133,7 +133,79 @@ main {
   z-index: 40;
 }
 
+.z-30 {
+  z-index: 30;
+}
+
 /* Smooth header transition */
 header {
   will-change: background-color, backdrop-filter;
+}
+
+/* Custom scrollbar styles for sidebar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-track-background-tertiary::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.scrollbar-thumb-border-strong::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+.scrollbar-thumb-border-strong::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Sidebar specific scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Ensure sidebar content doesn't interfere with main content scrolling */
+aside {
+  will-change: transform;
+}
+
+/* Smooth sidebar animations */
+.sidebar-enter {
+  transform: translateX(-100%);
+}
+
+.sidebar-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.sidebar-exit {
+  transform: translateX(0);
+}
+
+.sidebar-exit-active {
+  transform: translateX(-100%);
+  transition: transform 300ms ease-in-out;
+}
+
+/* Fix for mobile sidebar overlay */
+@media (max-width: 1023px) {
+  .sidebar-overlay {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+}
+
+/* Ensure proper stacking context */
+.layout-container {
+  position: relative;
+  z-index: 0;
+}
+
+/* Prevent layout shifts on mobile */
+@media (max-width: 1023px) {
+  .main-content {
+    transition: margin-left 0.3s ease-in-out;
+  }
 }

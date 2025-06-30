@@ -77,118 +77,124 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         }}
         className={clsx(
           'bg-background-secondary border-r border-border-subtle',
-          'w-64 lg:w-72 h-full',
-          // Desktop: always visible
-          'lg:relative lg:translate-x-0 lg:z-auto',
+          'w-64 lg:w-72 h-screen',
+          // Desktop: always visible, sticky positioning
+          'lg:sticky lg:top-0 lg:z-30 lg:translate-x-0',
           // Mobile: fixed overlay when open
           'fixed left-0 top-0 z-50 lg:block',
           !isOpen && 'hidden lg:block'
         )}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border-subtle">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
-              <Eye className="w-5 h-5 text-white" />
+        {/* Header - Sticky within sidebar */}
+        <div className="sticky top-0 z-10 bg-background-secondary border-b border-border-subtle">
+          <div className="flex items-center justify-between p-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
+                <Eye className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold text-text-primary">VisionTest</h1>
+                <p className="text-xs text-text-tertiary">Clinical Platform</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-semibold text-text-primary">VisionTest</h1>
-              <p className="text-xs text-text-tertiary">Clinical Platform</p>
-            </div>
+            <button
+              onClick={onToggle}
+              className="lg:hidden p-2 hover:bg-background-tertiary rounded-button transition-colors"
+            >
+              <X className="w-5 h-5 text-text-secondary" />
+            </button>
           </div>
-          <button
-            onClick={onToggle}
-            className="lg:hidden p-2 hover:bg-background-tertiary rounded-button transition-colors"
-          >
-            <X className="w-5 h-5 text-text-secondary" />
-          </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4 overflow-y-auto">
-          <div className="mb-6">
-            <h3 className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-3 px-3">
-              Navigation
-            </h3>
-            <ul className="space-y-1">
-              {navigationItems.map((item) => (
-                <li key={item.path}>
-                  <NavLink
-                    to={item.path}
-                    className={({ isActive }) =>
-                      clsx(
-                        'flex items-center space-x-3 px-3 py-3 rounded-button transition-all duration-200',
-                        'hover:bg-background-tertiary group',
-                        isActive
-                          ? 'bg-accent-primary text-white shadow-medium'
-                          : 'text-text-secondary hover:text-text-primary'
-                      )
-                    }
-                    onClick={() => window.innerWidth < 1024 && onToggle()}
-                  >
-                    <item.icon className="w-5 h-5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <span className="font-medium block truncate">{item.label}</span>
-                      <span className="text-xs opacity-75 block truncate">{item.description}</span>
-                    </div>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="mb-6">
-            <h3 className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-3 px-3">
-              Quick Actions
-            </h3>
-            <ul className="space-y-1">
-              {quickActions.map((action) => (
-                <li key={action.action}>
-                  <button
-                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-button transition-all duration-200 text-text-secondary hover:text-text-primary hover:bg-background-tertiary"
-                    onClick={() => {
-                      // Handle quick actions here
-                      console.log(`Quick action: ${action.action}`);
-                    }}
-                  >
-                    <action.icon className="w-4 h-4 flex-shrink-0" />
-                    <span className="font-medium">{action.label}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
-
-        {/* User Profile */}
-        <div className="p-4 border-t border-border-subtle">
-          <div className="flex items-center space-x-3 p-3 rounded-button hover:bg-background-tertiary transition-colors cursor-pointer mb-3">
-            <div className="w-10 h-10 bg-accent-secondary rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
+        {/* Scrollable Navigation Content */}
+        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-track-background-tertiary scrollbar-thumb-border-strong">
+          <nav className="p-4">
+            <div className="mb-6">
+              <h3 className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-3 px-3">
+                Navigation
+              </h3>
+              <ul className="space-y-1">
+                {navigationItems.map((item) => (
+                  <li key={item.path}>
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) =>
+                        clsx(
+                          'flex items-center space-x-3 px-3 py-3 rounded-button transition-all duration-200',
+                          'hover:bg-background-tertiary group',
+                          isActive
+                            ? 'bg-accent-primary text-white shadow-medium'
+                            : 'text-text-secondary hover:text-text-primary'
+                        )
+                      }
+                      onClick={() => window.innerWidth < 1024 && onToggle()}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium block truncate">{item.label}</span>
+                        <span className="text-xs opacity-75 block truncate">{item.description}</span>
+                      </div>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text-primary truncate">{getUserDisplayName()}</p>
-              <p className="text-xs text-text-tertiary truncate">Ophthalmic Technician</p>
+
+            {/* Quick Actions */}
+            <div className="mb-6">
+              <h3 className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-3 px-3">
+                Quick Actions
+              </h3>
+              <ul className="space-y-1">
+                {quickActions.map((action) => (
+                  <li key={action.action}>
+                    <button
+                      className="w-full flex items-center space-x-3 px-3 py-2 rounded-button transition-all duration-200 text-text-secondary hover:text-text-primary hover:bg-background-tertiary"
+                      onClick={() => {
+                        // Handle quick actions here
+                        console.log(`Quick action: ${action.action}`);
+                      }}
+                    >
+                      <action.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="font-medium">{action.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="w-2 h-2 bg-success rounded-full"></div>
-          </div>
-          
-          {/* Sign Out Button */}
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center space-x-3 px-3 py-2 rounded-button transition-all duration-200 text-text-secondary hover:text-error hover:bg-error/10 group"
-          >
-            <LogOut className="w-4 h-4 flex-shrink-0 group-hover:text-error transition-colors" />
-            <span className="font-medium group-hover:text-error transition-colors">Sign Out</span>
-          </button>
-          
-          {/* Status and Settings */}
-          <div className="mt-3 flex items-center justify-between text-xs">
-            <span className="text-text-tertiary">Online</span>
-            <button className="p-1 hover:bg-background-tertiary rounded transition-colors">
-              <Shield className="w-3 h-3 text-text-tertiary" />
+          </nav>
+        </div>
+
+        {/* User Profile - Sticky at bottom */}
+        <div className="sticky bottom-0 bg-background-secondary border-t border-border-subtle">
+          <div className="p-4">
+            <div className="flex items-center space-x-3 p-3 rounded-button hover:bg-background-tertiary transition-colors cursor-pointer mb-3">
+              <div className="w-10 h-10 bg-accent-secondary rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-text-primary truncate">{getUserDisplayName()}</p>
+                <p className="text-xs text-text-tertiary truncate">Ophthalmic Technician</p>
+              </div>
+              <div className="w-2 h-2 bg-success rounded-full"></div>
+            </div>
+            
+            {/* Sign Out Button */}
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center space-x-3 px-3 py-2 rounded-button transition-all duration-200 text-text-secondary hover:text-error hover:bg-error/10 group"
+            >
+              <LogOut className="w-4 h-4 flex-shrink-0 group-hover:text-error transition-colors" />
+              <span className="font-medium group-hover:text-error transition-colors">Sign Out</span>
             </button>
+            
+            {/* Status and Settings */}
+            <div className="mt-3 flex items-center justify-between text-xs">
+              <span className="text-text-tertiary">Online</span>
+              <button className="p-1 hover:bg-background-tertiary rounded transition-colors">
+                <Shield className="w-3 h-3 text-text-tertiary" />
+              </button>
+            </div>
           </div>
         </div>
       </motion.aside>
