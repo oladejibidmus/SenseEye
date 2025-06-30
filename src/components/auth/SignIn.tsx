@@ -52,7 +52,7 @@ export const SignIn: React.FC = () => {
       }
 
       if (data.user) {
-        navigate('/');
+        navigate('/app');
       }
     } catch (err: any) {
       console.error('Sign in error:', err);

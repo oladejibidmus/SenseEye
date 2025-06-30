@@ -69,7 +69,7 @@ export const TestSetup: React.FC = () => {
     if (selectedPatientData) {
       setCurrentPatient(selectedPatientData);
       setCurrentTest(testConfig);
-      navigate('/test');
+      navigate('/app/test');
     }
   };
 
@@ -170,7 +170,10 @@ export const TestSetup: React.FC = () => {
                   </button>
                 ))}
                 
-                <button className="w-full flex items-center space-x-3 p-3 hover:bg-background-secondary transition-colors text-left border-t border-border-subtle">
+                <button 
+                  className="w-full flex items-center space-x-3 p-3 hover:bg-background-secondary transition-colors text-left border-t border-border-subtle"
+                  onClick={() => navigate('/app/patients')}
+                >
                   <div className="w-10 h-10 bg-accent-primary rounded-full flex items-center justify-center">
                     <Plus className="w-5 h-5 text-white" />
                   </div>

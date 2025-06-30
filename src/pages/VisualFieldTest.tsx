@@ -294,7 +294,7 @@ export const VisualFieldTest: React.FC = () => {
         
         // Navigate to results page after a short delay
         setTimeout(() => {
-          navigate('/results');
+          navigate('/app/results');
         }, 2000);
         
       } catch (error) {
@@ -403,7 +403,7 @@ export const VisualFieldTest: React.FC = () => {
 
   useEffect(() => {
     if (!currentPatient || !currentTest) {
-      navigate('/setup');
+      navigate('/app/setup');
       return;
     }
   }, [currentPatient, currentTest, navigate]);
@@ -436,7 +436,7 @@ export const VisualFieldTest: React.FC = () => {
       stopTest();
       addNotification('warning', 'Test Stopped', 'Test was stopped before completion.');
     }
-    navigate('/results');
+    navigate('/app/results');
   };
 
   const formatTime = (seconds: number) => {

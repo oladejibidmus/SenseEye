@@ -35,7 +35,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page - public and default */}
+        {/* Landing page redirects to sign-in */}
         <Route path="/" element={<Landing />} />
         
         {/* Public auth routes */}
@@ -89,8 +89,8 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to landing page */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Redirect any unknown routes to sign-in page */}
+        <Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>
     </Router>
   );

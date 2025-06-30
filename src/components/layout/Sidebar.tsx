@@ -24,12 +24,12 @@ interface SidebarProps {
 }
 
 const navigationItems = [
-  { icon: Home, label: 'Dashboard', path: '/', description: 'Overview and statistics' },
-  { icon: SettingsIcon, label: 'Test Setup', path: '/setup', description: 'Configure test parameters' },
-  { icon: Eye, label: 'Visual Field Test', path: '/test', description: 'Conduct visual field testing' },
-  { icon: BarChart3, label: 'Results', path: '/results', description: 'View and analyze test results' },
-  { icon: Users, label: 'Patient Management', path: '/patients', description: 'Manage patient records' },
-  { icon: SettingsIcon, label: 'Settings', path: '/settings', description: 'Application preferences' },
+  { icon: Home, label: 'Dashboard', path: '/app', description: 'Overview and statistics' },
+  { icon: SettingsIcon, label: 'Test Setup', path: '/app/setup', description: 'Configure test parameters' },
+  { icon: Eye, label: 'Visual Field Test', path: '/app/test', description: 'Conduct visual field testing' },
+  { icon: BarChart3, label: 'Results', path: '/app/results', description: 'View and analyze test results' },
+  { icon: Users, label: 'Patient Management', path: '/app/patients', description: 'Manage patient records' },
+  { icon: SettingsIcon, label: 'Settings', path: '/app/settings', description: 'Application preferences' },
 ];
 
 const quickActions = [
