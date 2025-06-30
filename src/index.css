@@ -214,3 +214,21 @@ aside {
 .bg-gradient-radial {
   background: radial-gradient(var(--tw-gradient-stops));
 }
+
+/* Hero section specific styles */
+.w-140 {
+  width: 35rem;
+}
+
+.h-320 {
+  height: 80rem;
+}
+
+.-translate-y-87\.5 {
+  transform: translateY(-21.875rem);
+}
+
+/* Contain strict for performance */
+.contain-strict {
+  contain: strict;
+}
