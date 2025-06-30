@@ -10,9 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import Header from "@/components/ui/Header";
-import CapitalDemo from "./CapitalDemo";
-import FAQSection from "./FAQSection";
+import Header from "@/components/ui/header";
+import CapitalDemo from "@/components/ui/capitaldemo";
+import FAQSection from "@/components/ui/FAQSection";
 export interface SenseEyeLandingPageProps {
   className?: string;
 }
@@ -453,4 +453,21 @@ export default function SenseEyeLandingPage({
           </Card>
         </motion.div>}
     </div>;
+}
+
+// Placeholder SignUpModal component - you'll need to implement this
+function SignUpModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-8 rounded-lg max-w-md w-full mx-4">
+        <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+        <p className="text-gray-600 mb-6">Sign up functionality coming soon!</p>
+        <Button onClick={onClose} className="w-full">
+          Close
+        </Button>
+      </div>
+    </div>
+  );
 }
