@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { HeroHeader } from '../components/HeroHeader';
 import {
   Eye,
   Smartphone,
@@ -11,8 +12,6 @@ import {
   Star,
   CheckCircle,
   ArrowRight,
-  Menu,
-  X,
   Zap,
   Users,
   Lock,
@@ -46,7 +45,6 @@ const scaleOnHover = {
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const handleGetStarted = () => {
@@ -148,70 +146,10 @@ export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-[#FF6A1A] rounded-lg flex items-center justify-center">
-                <Eye className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">SenseEye</span>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">Features</a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">How It Works</a>
-              <a href="#testimonials" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">Testimonials</a>
-              <a href="#faq" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">FAQ</a>
-              <motion.button
-                {...scaleOnHover}
-                onClick={handleGetStarted}
-                className="bg-[#FF6A1A] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#E55A0F] transition-colors focus:outline-none focus:ring-2 focus:ring-[#FF6A1A] focus:ring-offset-2"
-                aria-label="Get started with SenseEye"
-              >
-                Get Started
-              </motion.button>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-[#FF6A1A] hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[#FF6A1A]"
-              aria-label="Toggle mobile menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-gray-200 py-4"
-            >
-              <div className="flex flex-col space-y-4">
-                <a href="#features" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">Features</a>
-                <a href="#how-it-works" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">How It Works</a>
-                <a href="#testimonials" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">Testimonials</a>
-                <a href="#faq" className="text-gray-600 hover:text-[#FF6A1A] transition-colors">FAQ</a>
-                <button
-                  onClick={handleGetStarted}
-                  className="bg-[#FF6A1A] text-white px-6 py-2 rounded-lg font-medium hover:bg-[#E55A0F] transition-colors text-left focus:outline-none focus:ring-2 focus:ring-[#FF6A1A] focus:ring-offset-2"
-                >
-                  Get Started
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </div>
-      </nav>
+      <HeroHeader />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-white py-20 lg:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-white pt-32 pb-20 lg:pt-40 lg:pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div {...fadeInUp} className="text-center lg:text-left">
