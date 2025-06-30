@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronRight, Play, Pause, Square, Volume2, Eye, Target, Clock } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TextEffect } from '../motion/TextEffect';
 import { AnimatedGroup } from '../motion/AnimatedGroup';
@@ -156,7 +156,7 @@ export const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Hero Image/Demo */}
+            {/* Visual Field Test Interface Demo */}
             <AnimatedGroup
               variants={{
                 container: {
@@ -175,35 +175,157 @@ export const HeroSection: React.FC = () => {
                   aria-hidden
                   className="absolute inset-0 z-10 bg-gradient-to-b from-transparent from-35% to-background-primary"
                 />
-                <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-border-default p-4 shadow-lg bg-background-secondary">
-                  {/* Visual Field Demo */}
-                  <div className="aspect-[15/8] relative rounded-2xl bg-black p-8 flex items-center justify-center">
-                    <div className="relative w-full max-w-md aspect-square">
-                      {/* Central fixation point */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-red-500 rounded-full z-10" />
-                      
-                      {/* Test grid */}
-                      <div className="grid grid-cols-8 gap-1 w-full h-full">
-                        {Array.from({ length: 64 }).map((_, i) => {
-                          const opacity = Math.random() > 0.3 ? 0.8 : 0.2;
-                          const color = Math.random() > 0.7 ? '#22c55e' : Math.random() > 0.4 ? '#f59e0b' : '#ef4444';
-                          return (
-                            <motion.div
-                              key={i}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity }}
-                              transition={{ delay: i * 0.01, duration: 0.5 }}
-                              className="rounded-full"
-                              style={{ backgroundColor: color, opacity }}
-                            />
-                          );
-                        })}
+                <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-border-default shadow-lg bg-background-secondary">
+                  {/* Visual Field Test Interface */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+                    {/* Test Interface */}
+                    <div className="lg:col-span-2">
+                      <div className="bg-background-secondary rounded-xl border border-border-default p-4">
+                        <div className="text-center mb-4">
+                          <h3 className="text-lg font-semibold text-text-primary mb-2">Visual Field Test</h3>
+                          <p className="text-text-tertiary text-sm">
+                            Sarah Johnson - 24-2 OD
+                          </p>
+                          <div className="flex items-center justify-center space-x-2 mt-2">
+                            <div className="flex items-center space-x-2 text-accent-primary">
+                              <Eye className="w-4 h-4" />
+                              <span className="text-sm font-medium">Testing in Progress</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Visual Field Grid */}
+                        <div className="bg-black rounded-lg p-8 mb-4">
+                          <div className="relative w-full max-w-md mx-auto aspect-square">
+                            {/* Central fixation point */}
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full z-10" />
+                            
+                            {/* Test grid */}
+                            <div className="grid grid-cols-8 gap-1 w-full h-full">
+                              {Array.from({ length: 64 }).map((_, i) => {
+                                const opacity = Math.random() > 0.3 ? 0.8 : 0.2;
+                                const color = Math.random() > 0.7 ? '#22c55e' : Math.random() > 0.4 ? '#f59e0b' : '#ef4444';
+                                const isActive = i === 23; // Simulate active point
+                                return (
+                                  <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ 
+                                      opacity: isActive ? 1 : opacity,
+                                      scale: isActive ? 1.5 : 1
+                                    }}
+                                    transition={{ delay: i * 0.01, duration: 0.5 }}
+                                    className="rounded-full"
+                                    style={{ 
+                                      backgroundColor: isActive ? '#ffffff' : color, 
+                                      opacity: isActive ? 1 : opacity,
+                                      width: '8px',
+                                      height: '8px'
+                                    }}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Patient Instructions */}
+                        <div className="bg-background-tertiary rounded-lg p-4">
+                          <h4 className="font-medium text-text-primary mb-2">Instructions for Patient:</h4>
+                          <ul className="text-sm text-text-secondary space-y-1">
+                            <li>• Look at the red dot in the center at all times</li>
+                            <li>• Press the button when you see a flash of light</li>
+                            <li>• Don't move your head or eyes</li>
+                            <li>• Blink normally between flashes</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                    
-                    {/* Demo overlay text */}
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <p className="text-sm opacity-75">Live Visual Field Test Demo</p>
+
+                    {/* Control Panel */}
+                    <div className="space-y-4">
+                      {/* Progress */}
+                      <div className="bg-background-secondary rounded-xl border border-border-default p-4">
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-text-primary">Test Progress</h4>
+                            <span className="text-sm text-text-tertiary">67%</span>
+                          </div>
+                          <div className="w-full bg-background-tertiary rounded-full h-2">
+                            <div className="h-2 rounded-full bg-accent-primary" style={{ width: '67%' }} />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-text-tertiary">Current Quadrant</p>
+                            <p className="text-text-primary font-medium">Superior Nasal</p>
+                          </div>
+                          <div>
+                            <p className="text-text-tertiary">Time Remaining</p>
+                            <p className="font-medium flex items-center text-text-primary">
+                              <Clock className="w-3 h-3 mr-1" />
+                              2:15
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Reliability */}
+                      <div className="bg-background-secondary rounded-xl border border-border-default p-4">
+                        <h4 className="font-medium text-text-primary mb-4">Reliability Indices</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-text-secondary">False Positives</span>
+                            <span className="font-medium text-success">2%</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-text-secondary">False Negatives</span>
+                            <span className="font-medium text-success">1%</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-text-secondary">Fixation Losses</span>
+                            <span className="font-medium text-success">0%</span>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-4 p-3 rounded-lg flex items-center space-x-2 bg-success/20">
+                          <div className="w-4 h-4 bg-success rounded-full" />
+                          <span className="text-sm text-success font-medium">Reliable Test</span>
+                        </div>
+                      </div>
+
+                      {/* Controls */}
+                      <div className="bg-background-secondary rounded-xl border border-border-default p-4">
+                        <h4 className="font-medium text-text-primary mb-4">Test Controls</h4>
+                        <div className="space-y-3">
+                          <div className="flex space-x-2">
+                            <Button variant="secondary" size="sm" icon={<Pause className="w-3 h-3" />}>
+                              Pause
+                            </Button>
+                            <Button variant="danger" size="sm" icon={<Square className="w-3 h-3" />}>
+                              Stop
+                            </Button>
+                          </div>
+                          
+                          <button className="w-full flex items-center justify-between p-3 bg-background-tertiary rounded-button hover:bg-border-subtle transition-colors">
+                            <span className="text-text-primary">Audio Feedback</span>
+                            <Volume2 className="w-4 h-4 text-accent-primary" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Patient Response */}
+                      <div className="bg-background-secondary rounded-xl border border-border-default p-4">
+                        <h4 className="font-medium text-text-primary mb-4">Patient Response</h4>
+                        <Button size="lg" className="w-full h-16 text-lg">
+                          <Target className="w-6 h-6 mr-2" />
+                          Response Button
+                        </Button>
+                        <p className="text-xs text-text-tertiary mt-2 text-center">
+                          Patient presses when seeing light stimulus
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
