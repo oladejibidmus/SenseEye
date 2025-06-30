@@ -121,5 +121,6 @@ export const CallToAction: React.FC = () => {
         </motion.div>
       </div>
     </section>
+  )
   );
 };
