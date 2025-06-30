@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
   return (
-    <header className="bg-background-secondary border-b border-border-subtle px-6 py-4">
+    <header className="sticky top-0 z-40 bg-background-secondary/95 backdrop-blur-sm border-b border-border-subtle px-6 py-4 transition-all duration-200">
       <div className="flex items-center justify-between">
         {/* Left side */}
         <div className="flex items-center space-x-4">

@@ -100,3 +100,40 @@ button:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
 }
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure sticky header doesn't cause layout shifts */
+body {
+  overflow-x: hidden;
+}
+
+/* Fix for sticky header positioning */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+/* Prevent content jumping when header becomes sticky */
+main {
+  scroll-margin-top: 80px;
+}
+
+/* Smooth backdrop blur transition */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Ensure proper z-index stacking */
+.z-40 {
+  z-index: 40;
+}
+
+/* Smooth header transition */
+header {
+  will-change: background-color, backdrop-filter;
+}
