@@ -333,7 +333,7 @@ export const ContentSection: React.FC = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 bg-error rounded"></div>
-                      <span className="text-text-secondary">Defect (<-5 dB)</span>
+                      <span className="text-text-secondary">Defect (&lt;-5 dB)</span>
                     </div>
                   </div>
                 </div>
