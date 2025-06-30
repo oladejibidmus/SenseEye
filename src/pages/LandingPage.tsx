@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import FAQSection from '../components/ui/FAQSection';
 import {
   Eye,
   Menu,
@@ -44,12 +45,6 @@ interface Testimonial {
   avatar: string;
   quote: string;
   rating: number;
-}
-
-interface FAQ {
-  id: string;
-  question: string;
-  answer: string;
 }
 
 const features: Feature[] = [
@@ -118,39 +113,6 @@ const testimonials: Testimonial[] = [
   }
 ];
 
-const faqs: FAQ[] = [
-  {
-    id: "faq-1",
-    question: "Is SenseEye approved for medical use?",
-    answer: "SenseEye is validated for clinical use and designed in accordance with relevant medical device standards. Our algorithms have been peer-reviewed and tested against traditional perimetry equipment."
-  },
-  {
-    id: "faq-2",
-    question: "Do I need an internet connection?",
-    answer: "No. Once downloaded, SenseEye runs entirely offline. Your test data never leaves your device unless you choose to share results with your healthcare provider."
-  },
-  {
-    id: "faq-3",
-    question: "How accurate are the results?",
-    answer: "Clinical studies show SenseEye achieves 95%+ correlation with traditional Humphrey field analyzers. Our AI algorithms are continuously validated against gold-standard equipment."
-  },
-  {
-    id: "faq-4",
-    question: "What devices are supported?",
-    answer: "SenseEye works on smartphones, tablets, and computers with modern web browsers. We recommend a quiet environment and a device with a screen size of at least 5 inches."
-  },
-  {
-    id: "faq-5",
-    question: "How long does a test take?",
-    answer: "A complete visual field test typically takes 3-5 minutes per eye. The app provides voice guidance and breaks to ensure comfort throughout the process."
-  },
-  {
-    id: "faq-6",
-    question: "Is my data secure?",
-    answer: "Absolutely. All processing happens locally on your device. We follow HIPAA guidelines and never store personal health information on our servers without explicit consent."
-  }
-];
-
 const navigationLinks = [
   { label: "How It Works", href: "#how-it-works" },
   { label: "Features", href: "#features" },
@@ -163,7 +125,6 @@ export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [openFAQ, setOpenFAQ] = useState<string | null>(null);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -179,10 +140,6 @@ export const LandingPage: React.FC = () => {
 
   const handleSeeDemo = () => {
     scrollToSection('#how-it-works');
-  };
-
-  const toggleFAQ = (faqId: string) => {
-    setOpenFAQ(openFAQ === faqId ? null : faqId);
   };
 
   const nextTestimonial = () => {
@@ -625,70 +582,7 @@ export const LandingPage: React.FC = () => {
       {/* FAQ Section */}
       <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8"
                style={{ backgroundColor: 'white' }}>
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center space-y-4 mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold"
-                style={{ color: '#0A1A2F' }}>
-              Common Questions
-            </h2>
-            <p className="text-xl"
-               style={{ color: '#4A5568' }}>
-              Everything you need to know about SenseEye
-            </p>
-          </motion.div>
-
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={faq.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card style={{ backgroundColor: '#FAFAF9', borderColor: '#E5E5E5' }}>
-                  <button
-                    onClick={() => toggleFAQ(faq.id)}
-                    className="w-full p-6 text-left flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-offset-2"
-                    style={{ focusRingColor: '#FF6A1A' }}
-                    aria-expanded={openFAQ === faq.id}
-                  >
-                    <h3 className="text-lg font-semibold"
-                        style={{ color: '#0A1A2F' }}>
-                      {faq.question}
-                    </h3>
-                    {openFAQ === faq.id ? (
-                      <ChevronUp className="w-5 h-5 flex-shrink-0"
-                                 style={{ color: '#FF6A1A' }} />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 flex-shrink-0"
-                                   style={{ color: '#FF6A1A' }} />
-                    )}
-                  </button>
-                  
-                  {openFAQ === faq.id && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="px-6 pb-6"
-                    >
-                      <p style={{ color: '#4A5568' }}>
-                        {faq.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+        <FAQSection />
       </section>
 
       {/* CTA Section */}
