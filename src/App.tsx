@@ -35,53 +35,53 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Landing page - public */}
-        <Route path="/landing" element={<Landing />} />
+        {/* Landing page - public and default */}
+        <Route path="/" element={<Landing />} />
         
-        {/* Public routes */}
+        {/* Public auth routes */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         
         {/* Test route - accessible without authentication for debugging */}
         <Route path="/test-supabase" element={<SupabaseTestPage />} />
         
-        {/* Protected routes */}
-        <Route path="/" element={
+        {/* Protected app routes */}
+        <Route path="/app" element={
           <ProtectedRoute>
             <Layout>
               <Dashboard />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/setup" element={
+        <Route path="/app/setup" element={
           <ProtectedRoute>
             <Layout>
               <TestSetup />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/test" element={
+        <Route path="/app/test" element={
           <ProtectedRoute>
             <Layout>
               <VisualFieldTest />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/results" element={
+        <Route path="/app/results" element={
           <ProtectedRoute>
             <Layout>
               <Results />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/patients" element={
+        <Route path="/app/patients" element={
           <ProtectedRoute>
             <Layout>
               <Patients />
             </Layout>
           </ProtectedRoute>
         } />
-        <Route path="/settings" element={
+        <Route path="/app/settings" element={
           <ProtectedRoute>
             <Layout>
               <Settings />
@@ -89,7 +89,7 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* Redirect any unknown routes to dashboard */}
+        {/* Redirect any unknown routes to landing page */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
